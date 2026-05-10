@@ -26,8 +26,53 @@
   html,body{margin:0;padding:0;background:var(--parchment);color:var(--ink);overflow-x:hidden}
   body{
     font-family:'Newsreader',Georgia,serif;
-    -webkit-font-smoothing:antialiased;line-height:1.55;font-size:17px;
+    -webkit-font-smoothing:antialiased;line-height:1.55;font-size:17px;cursor:none;
   }
+  @media (hover:none){body{cursor:auto}}
+
+  /* === BESPOKE BOOK-PULL LOADER === */
+  .loader{
+    position:fixed;inset:0;z-index:99999;background:var(--emerald);color:var(--parchment);
+    display:grid;place-items:center;
+    transition:opacity .9s ease, visibility .9s;
+  }
+  .loader[data-state="done"]{opacity:0;visibility:hidden;pointer-events:none}
+  .loader-shelf{
+    position:relative;width:min(420px,80vw);height:280px;
+  }
+  .loader-shelf .shelf-board{
+    position:absolute;left:0;right:0;bottom:0;height:18px;background:var(--gold-leaf);
+    box-shadow:0 14px 28px rgba(0,0,0,.4);
+  }
+  .loader-shelf .book-pull{
+    position:absolute;bottom:18px;width:46px;height:200px;border-radius:4px 4px 0 0;
+    background:linear-gradient(180deg,var(--mahogany-2),var(--mahogany));
+    border:1px solid var(--gold-leaf);transform-origin:bottom center;
+    transition:transform 1.2s cubic-bezier(.6,.04,.14,1);
+  }
+  .loader-shelf .book-pull::before{content:"";position:absolute;left:6px;right:6px;top:8px;bottom:8px;border:1px solid rgba(181,140,42,.6);border-radius:2px}
+  .loader-shelf .book-pull:nth-child(2){left:30px;height:188px;background:linear-gradient(180deg,var(--emerald-3),var(--emerald-2))}
+  .loader-shelf .book-pull:nth-child(3){left:80px;height:196px}
+  .loader-shelf .book-pull:nth-child(4){left:130px;height:184px;background:linear-gradient(180deg,#7c3a25,#5a2818)}
+  .loader-shelf .book-pull:nth-child(5){left:178px;height:204px;background:linear-gradient(180deg,#244e3c,#1a3d2e);transform:translateY(-260px) rotate(0deg)}
+  .loader[data-state="pulling"] .book-pull:nth-child(5){transform:translateY(-260px) rotate(0deg);}
+  .loader[data-state="reading"] .book-pull:nth-child(5){transform:translateY(-280px) rotate(-20deg) scale(1.1)}
+  .loader-shelf .book-pull:nth-child(6){left:230px;height:194px;background:linear-gradient(180deg,#b58c2a,#5a2818)}
+  .loader-shelf .book-pull:nth-child(7){left:280px;height:200px;background:linear-gradient(180deg,var(--emerald-3),var(--emerald))}
+  .loader-cap{
+    position:absolute;left:50%;top:calc(100% + 24px);transform:translateX(-50%);white-space:nowrap;
+    font-family:'JetBrains Mono',monospace;font-weight:600;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold-leaf);
+  }
+
+  /* cursor — nib */
+  .cursor{
+    position:fixed;left:0;top:0;width:14px;height:14px;border-radius:50%;
+    background:var(--mahogany);pointer-events:none;
+    transform:translate(-50%,-50%);z-index:99998;
+    transition:width .25s, height .25s, background .25s;will-change:transform;
+  }
+  .cursor.hover{width:42px;height:42px;background:rgba(90,40,24,.18);box-shadow:0 0 0 1px var(--mahogany)}
+  @media (hover:none){.cursor{display:none}}
   a{color:inherit;text-decoration:none}
   .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
 
@@ -187,12 +232,29 @@
   .reveal.in{opacity:1;transform:none}
 
   @media (prefers-reduced-motion: reduce){
-    *{animation:none !important;transition:none !important}
+    *{animation:none !important;transition-duration:.001ms !important}
     .reveal{opacity:1;transform:none}
+    .loader,.cursor{display:none}body{cursor:auto}
   }
 </style>
 </head>
 <body>
+
+<div class="loader" data-loader>
+  <div class="loader-shelf">
+    <div class="shelf-board"></div>
+    <div class="book-pull"></div>
+    <div class="book-pull"></div>
+    <div class="book-pull"></div>
+    <div class="book-pull"></div>
+    <div class="book-pull"></div>
+    <div class="book-pull"></div>
+    <div class="book-pull"></div>
+    <div class="loader-cap">Pulling Volume One</div>
+  </div>
+</div>
+
+<div class="cursor" id="cursor" aria-hidden="true"></div>
 
 <nav class="top">
   <a href="../index.html" class="crest">
@@ -468,24 +530,93 @@
   <span><a href="../index.html">← Back to concepts</a></span>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<!-- book-pull loader + FLIP filter -->
 <script type="module">
+  import Lenis from 'https://cdn.jsdelivr.net/npm/lenis@1.1.13/+esm';
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* LOADER — book-pull animation */
+  const loader = document.querySelector('[data-loader]');
+  function endLoader(){loader.dataset.state='done';setTimeout(()=>loader.remove(),900);runIntro();}
+  if(reduce){setTimeout(endLoader,180);}
+  else{
+    setTimeout(()=>{loader.dataset.state='reading';},800);
+    setTimeout(endLoader,2000);
+  }
+
+  /* LENIS */
+  let lenis = null;
   if(!reduce){
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
-    }, {threshold:0.12});
-    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+    lenis = new Lenis({duration:1.15,easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)),smoothWheel:true});
+    lenis.on('scroll', ScrollTrigger.update);gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0);
+  }
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{const id=a.getAttribute('href');if(id.length>1){const t=document.querySelector(id);if(t&&lenis){e.preventDefault();lenis.scrollTo(t,{offset:0,duration:1.4});}}});
+  });
+
+  function runIntro(){
+    if(reduce) return;
+    gsap.from('h1.masthead-title',{y:30,opacity:0,duration:1.1,ease:'power3.out'});
+    gsap.from('.meta-line, .stat-block, .search-row',{y:18,opacity:0,duration:.95,stagger:.12,delay:.25,ease:'power3.out'});
+  }
+
+  if(!reduce){
+    gsap.utils.toArray('.reveal').forEach(el=>{
+      gsap.fromTo(el,{y:24,opacity:0},{y:0,opacity:1,duration:.95,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 86%'}});
+    });
+
+    /* SIGNATURE: scroll-driven reading-progress + book hover 3D tilt */
+    document.querySelectorAll('.book').forEach(b=>{
+      b.addEventListener('pointermove',e=>{
+        const r=b.getBoundingClientRect();
+        const dx=(e.clientX-r.left)/r.width-0.5;
+        const dy=(e.clientY-r.top)/r.height-0.5;
+        b.style.transform=`perspective(1100px) rotateX(${-dy*5}deg) rotateY(${dx*7}deg) translateY(-6px)`;
+      });
+      b.addEventListener('pointerleave',()=>{b.style.transform=''});
+    });
+
+    /* SIGNATURE: FLIP-style filter — fade-rearrange grid on chip change */
+    const grid = document.querySelector('.grid');
+    const tags = ['all','confidence','curiosity','courage','friendship','kindness'];
+    document.querySelectorAll('.chip').forEach((c,idx)=>{
+      c.addEventListener('click',()=>{
+        document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
+        c.classList.add('on');
+        const cards = Array.from(grid.querySelectorAll('.book'));
+        const tag = c.textContent.trim().toLowerCase();
+        // FLIP step 1: capture initial positions
+        const first = cards.map(card=>card.getBoundingClientRect());
+        // mutate (visually de-emphasize non-matching)
+        cards.forEach((card,i)=>{
+          const meta = card.textContent.toLowerCase();
+          const match = tag==='all' || meta.includes(tag);
+          card.style.opacity = match ? '1' : '0.18';
+          card.style.filter = match ? 'none' : 'saturate(.4)';
+        });
+        // FLIP step 4: animate the de-emphasis change with a tiny scale pulse
+        gsap.fromTo(cards,{scale:.96},{scale:1,duration:.45,ease:'power2.out',stagger:.02});
+      });
+    });
   } else {
     document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));
   }
 
-  // Filter chip interaction (visual only)
-  document.querySelectorAll('.chip').forEach(c=>{
-    c.addEventListener('click', ()=>{
-      document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
-      c.classList.add('on');
+  // Cursor
+  const cur = document.getElementById('cursor');
+  if(cur && !reduce && matchMedia('(hover:hover)').matches){
+    let cx=0,cy=0,ccx=0,ccy=0;
+    window.addEventListener('pointermove',e=>{cx=e.clientX;cy=e.clientY});
+    function curTick(){ccx+=(cx-ccx)*.22;ccy+=(cy-ccy)*.22;cur.style.transform=`translate(${ccx}px,${ccy}px) translate(-50%,-50%)`;requestAnimationFrame(curTick);}
+    requestAnimationFrame(curTick);
+    document.querySelectorAll('a, button, .book, .chip, .char, [data-cursor-hover]').forEach(el=>{
+      el.addEventListener('pointerenter',()=>cur.classList.add('hover'));
+      el.addEventListener('pointerleave',()=>cur.classList.remove('hover'));
     });
-  });
+  }
 </script>
 </body>
 </html>

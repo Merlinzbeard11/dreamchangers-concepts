@@ -27,7 +27,7 @@
   body{
     font-family:'Newsreader',Georgia,serif;
     -webkit-font-smoothing:antialiased;
-    line-height:1.6;font-size:18px;
+    line-height:1.6;font-size:18px;cursor:none;
     background:
       radial-gradient(60% 40% at 20% 10%, rgba(255,255,255,.5), transparent 70%),
       radial-gradient(60% 40% at 80% 90%, rgba(179,74,31,.08), transparent 70%),
@@ -226,13 +226,109 @@
     pointer-events:none;
   }
 
+  @media (hover:none){body{cursor:auto}}
+
+  /* === BESPOKE BOOK-OPENING LOADER === */
+  .loader{
+    position:fixed;inset:0;z-index:99999;background:var(--parchment);color:var(--ink);
+    display:grid;place-items:center;
+    transition:opacity .9s ease, visibility .9s;
+  }
+  .loader[data-state="done"]{opacity:0;visibility:hidden;pointer-events:none}
+  .loader-book{
+    width:min(420px,82vw);aspect-ratio:5/4;perspective:1800px;
+    position:relative;
+  }
+  .loader-book .cover, .loader-book .pages{
+    position:absolute;inset:0;border-radius:6px;
+    transform-style:preserve-3d;transform-origin:left center;
+    transition:transform 1.6s cubic-bezier(.6,.04,.14,1);
+  }
+  .loader-book .cover{
+    background:linear-gradient(135deg,#1f4630, #2e4f3a);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.05), 0 30px 60px -20px rgba(43,26,12,.5);
+    z-index:2;
+  }
+  .loader-book .cover::after{
+    content:"Once upon a generation…";
+    position:absolute;left:36px;right:36px;top:50%;transform:translateY(-50%);
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:24px;
+    color:var(--gold);text-align:center;
+  }
+  .loader-book .pages{background:linear-gradient(180deg,#f8ecd1,#efe1bf);z-index:1;border:1px solid rgba(43,26,12,.18)}
+  .loader[data-state="opening"] .cover{transform:rotateY(-160deg)}
+  .loader-counter{
+    position:absolute;left:50%;bottom:-48px;transform:translateX(-50%);
+    font-family:'Fraunces',serif;font-style:italic;font-weight:300;font-size:14px;
+    letter-spacing:.32em;text-transform:uppercase;color:var(--muted);
+  }
+
+  /* cursor — quill */
+  .cursor{
+    position:fixed;left:0;top:0;width:18px;height:18px;border-radius:50%;
+    border:1px solid var(--ember);background:transparent;
+    pointer-events:none;transform:translate(-50%,-50%);z-index:99998;
+    transition:width .3s, height .3s, background .3s;will-change:transform;
+  }
+  .cursor.hover{width:50px;height:50px;background:rgba(179,74,31,.12)}
+  @media (hover:none){.cursor{display:none}}
+
+  /* SIGNATURE: 3D page-flip scroll-driven */
+  .pageflip{
+    height:300vh;position:relative;
+  }
+  .pageflip-stage{
+    position:sticky;top:0;height:100vh;display:grid;place-items:center;
+    perspective:2400px;perspective-origin:50% 50%;
+  }
+  .pageflip-book{
+    width:min(880px,86vw);aspect-ratio:8/5;position:relative;transform-style:preserve-3d;
+  }
+  .pageflip-spread{
+    position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;
+    background:linear-gradient(180deg,#f8ecd1,#efe1bf);
+    border:1px solid rgba(43,26,12,.18);border-radius:4px;
+    box-shadow:0 30px 60px -30px rgba(43,26,12,.4);
+  }
+  .pageflip-spread::after{
+    content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:rgba(43,26,12,.14);transform:translateX(-50%);
+  }
+  .pageflip-page{
+    position:absolute;top:0;right:0;bottom:0;width:50%;
+    transform-origin:left center;transform-style:preserve-3d;
+    background:linear-gradient(90deg,#efe1bf,#f8ecd1);
+    border:1px solid rgba(43,26,12,.18);
+    backface-visibility:hidden;
+    will-change:transform;
+  }
+  .pageflip-page-back{
+    position:absolute;inset:0;background:linear-gradient(270deg,#efe1bf,#f8ecd1);
+    transform:rotateY(180deg);backface-visibility:hidden;
+    border:1px solid rgba(43,26,12,.18);padding:48px;display:flex;flex-direction:column;justify-content:center;
+  }
+  .pageflip-front{padding:48px;display:flex;flex-direction:column;justify-content:center}
+  .pageflip h3{font-family:'Fraunces',serif;font-style:italic;font-weight:400;font-size:clamp(22px,3vw,40px);margin:0 0 12px;color:var(--ember)}
+  .pageflip p{font-size:15px;color:var(--ink);margin:0;max-width:38ch}
+  .pageflip-cap{
+    position:absolute;left:50%;bottom:-48px;transform:translateX(-50%);
+    font-family:'Fraunces',serif;font-style:italic;color:var(--muted);font-size:13px;letter-spacing:.32em;text-transform:uppercase;
+  }
+
   @media (prefers-reduced-motion: reduce){
-    *{animation:none !important;transition:none !important}
+    *{animation:none !important;transition-duration:.001ms !important}
     .reveal{opacity:1;transform:none}
+    .loader,.cursor{display:none}body{cursor:auto}
   }
 </style>
 </head>
 <body>
+
+<div class="loader" data-loader>
+  <div class="loader-book"><div class="pages"></div><div class="cover"></div></div>
+  <div class="loader-counter">Opening · <span data-loader-pct>00</span>%</div>
+</div>
+
+<div class="cursor" id="cursor" aria-hidden="true"></div>
 
 <div class="frame">
 
@@ -397,6 +493,29 @@
     </div>
   </article>
 
+  <!-- SIGNATURE: scroll-driven 3D page-flip -->
+  <section class="pageflip" data-pageflip>
+    <div class="pageflip-stage">
+      <div class="pageflip-book" data-pageflip-book>
+        <div class="pageflip-spread">
+          <div class="pageflip-front"><h3>Chapter the First</h3><p>Once a writer wrote a different ending. From that page came a galaxy.</p></div>
+          <div class="pageflip-front"><h3>Of small voices, made loud.</h3><p>Eight books. Twenty-three characters. The first words a child remembers.</p></div>
+        </div>
+        <div class="pageflip-page" data-pageflip-page>
+          <div class="pageflip-front">
+            <h3>The page turns.</h3>
+            <p>A story about a girl who stopped flinching when the world told her to. Scroll to turn.</p>
+          </div>
+          <div class="pageflip-page-back">
+            <h3>And turns.</h3>
+            <p>Eight chapters in, the kid stops asking when the lesson begins. They are the lesson now. Scroll to turn again.</p>
+          </div>
+        </div>
+      </div>
+      <div class="pageflip-cap" aria-hidden="true">Scroll to turn the page</div>
+    </div>
+  </section>
+
   <article class="spread" id="chapter-3">
     <div class="chapter-num reveal">Chapter III</div>
     <h2 class="chapter-title reveal">Choose your child's <em>Dream Path</em>.</h2>
@@ -425,16 +544,81 @@
 
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script type="module">
-  // Reveal-on-scroll
+  import Lenis from 'https://cdn.jsdelivr.net/npm/lenis@1.1.13/+esm';
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* LOADER — book opens */
+  const loader = document.querySelector('[data-loader]');
+  const pct = document.querySelector('[data-loader-pct]');
+  function endLoader(){loader.dataset.state='opening';setTimeout(()=>{loader.style.opacity=0;setTimeout(()=>loader.remove(),900);runIntro();},900);}
+  if(reduce){pct.textContent='99';setTimeout(endLoader,180);}
+  else{
+    let v=0;const t=()=>{v+=2+Math.random()*4;if(v>=99)v=99;pct.textContent=String(Math.floor(v)).padStart(2,'0');if(v>=99){setTimeout(endLoader,260);}else{setTimeout(t,40+Math.random()*60);}};
+    setTimeout(t,180);
+  }
+
+  /* LENIS */
+  let lenis = null;
   if(!reduce){
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
-    }, {threshold:0.12});
-    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+    lenis = new Lenis({duration:1.2,easing:t=>Math.min(1,1.001-Math.pow(2,-10*t)),smoothWheel:true});
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t=>lenis.raf(t*1000));gsap.ticker.lagSmoothing(0);
+  }
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',e=>{const id=a.getAttribute('href');if(id.length>1){const t=document.querySelector(id);if(t&&lenis){e.preventDefault();lenis.scrollTo(t,{offset:0,duration:1.4});}}});
+  });
+
+  function runIntro(){
+    if(reduce) return;
+    gsap.from('h1.title',{y:24,opacity:0,duration:1.1,ease:'power3.out'});
+    gsap.from('.ornament, .subtitle, .cta-row',{y:18,opacity:0,duration:.9,stagger:.12,delay:.3,ease:'power3.out'});
+  }
+
+  /* REVEAL */
+  if(!reduce){
+    gsap.utils.toArray('.reveal').forEach(el=>{
+      gsap.fromTo(el,{y:24,opacity:0,rotateX:2},{y:0,opacity:1,rotateX:0,duration:1,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 86%'}});
+    });
   } else {
     document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));
+  }
+
+  /* SIGNATURE: scroll-driven 3D page-flip */
+  if(!reduce){
+    ScrollTrigger.create({
+      trigger:'[data-pageflip]', start:'top top', end:'bottom bottom', scrub:1,
+      onUpdate(self){
+        const p = self.progress;
+        const page = document.querySelector('[data-pageflip-page]');
+        if(!page) return;
+        // 0 → 1 maps to rotateY 0deg → -180deg
+        page.style.transform = `rotateY(${-p*180}deg)`;
+        // tilt the book a little for drama
+        const book = document.querySelector('[data-pageflip-book]');
+        if(book) book.style.transform = `rotateZ(${-p*1.5}deg) rotateX(${p*4}deg)`;
+      }
+    });
+  } else {
+    // static — keep flat
+    const page = document.querySelector('[data-pageflip-page]');
+    if(page) page.style.transform = 'rotateY(-90deg)';
+  }
+
+  /* CURSOR */
+  const cur = document.getElementById('cursor');
+  if(cur && !reduce && matchMedia('(hover:hover)').matches){
+    let cx=0,cy=0,ccx=0,ccy=0;
+    window.addEventListener('pointermove',e=>{cx=e.clientX;cy=e.clientY});
+    function curTick(){ccx+=(cx-ccx)*.22;ccy+=(cy-ccy)*.22;cur.style.transform=`translate(${ccx}px,${ccy}px) translate(-50%,-50%)`;requestAnimationFrame(curTick);}
+    requestAnimationFrame(curTick);
+    document.querySelectorAll('a, button, .cta, .ghost, .path, [data-cursor-hover]').forEach(el=>{
+      el.addEventListener('pointerenter',()=>cur.classList.add('hover'));
+      el.addEventListener('pointerleave',()=>cur.classList.remove('hover'));
+    });
   }
 </script>
 
