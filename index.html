@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Dream Changers Publishing — Three Homepage Concepts</title>
+<meta name="description" content="Three competing Awwwards-caliber homepage concept directions for Dream Changers Publishing. Pick a direction." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@300..800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#10131a;
+    --paper:#f7f4ed;
+    --line:rgba(16,19,26,.12);
+    --muted:#5b6473;
+    --accent:#c99a3b;
+    --indigo:#1f1b4d;
+    --ember:#b34a1f;
+    --neon:#ff2d8a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    background:var(--paper);color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.55;
+  }
+  a{color:inherit}
+  .wrap{max-width:1280px;margin:0 auto;padding:48px 32px 96px}
+  header.top{display:flex;justify-content:space-between;align-items:flex-start;gap:32px;flex-wrap:wrap;margin-bottom:80px}
+  .brand{font-family:'Fraunces',serif;font-weight:600;font-size:18px;letter-spacing:.01em}
+  .brand .dot{display:inline-block;width:6px;height:6px;background:var(--accent);border-radius:50%;margin:0 8px;vertical-align:middle}
+  .meta{font-size:13px;color:var(--muted);text-align:right;line-height:1.5}
+  .meta b{color:var(--ink)}
+  h1.hero{
+    font-family:'Fraunces',serif;
+    font-weight:300;
+    font-size:clamp(48px,8.5vw,120px);
+    line-height:.95;letter-spacing:-.025em;
+    margin:0 0 24px;
+  }
+  h1.hero em{font-style:italic;font-weight:400;color:var(--accent)}
+  .lede{
+    font-size:clamp(18px,1.6vw,22px);
+    color:var(--muted);max-width:62ch;margin:0 0 48px;
+  }
+  .legend{display:flex;gap:8px;align-items:center;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:32px}
+  .legend::before{content:"";width:24px;height:1px;background:var(--ink);display:inline-block}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+  @media (max-width:1000px){.grid{grid-template-columns:1fr}}
+
+  .card{
+    position:relative;display:block;text-decoration:none;color:inherit;
+    border:1px solid var(--line);border-radius:18px;overflow:hidden;
+    background:#fff;transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .5s;
+    will-change:transform;
+  }
+  .card:hover{transform:translateY(-6px);box-shadow:0 30px 60px -30px rgba(16,19,26,.25)}
+  .thumb{aspect-ratio:4/5;position:relative;overflow:hidden}
+  .thumb canvas,.thumb svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+  /* Concept A thumb: cosmic gradient + radial glow */
+  .thumb-a{
+    background:
+      radial-gradient(60% 40% at 50% 38%,#3a2da3 0%,#1f1b4d 45%,#080720 100%);
+  }
+  .thumb-a::after{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(2px 2px at 12% 22%,#fff,transparent 60%),
+      radial-gradient(1.5px 1.5px at 78% 14%,#ffd97a,transparent 60%),
+      radial-gradient(1px 1px at 32% 70%,#fff,transparent 60%),
+      radial-gradient(1.5px 1.5px at 64% 58%,#ff8aa6,transparent 60%),
+      radial-gradient(1px 1px at 88% 82%,#fff,transparent 60%),
+      radial-gradient(1.2px 1.2px at 18% 88%,#ffd97a,transparent 60%);
+    opacity:.85;
+    animation: twinkle 6s linear infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{opacity:.55}50%{opacity:.95}
+  }
+
+  /* Concept B thumb: parchment + ember + forest illustration */
+  .thumb-b{
+    background:
+      linear-gradient(180deg,#f8ecd1 0%,#f3e3c3 60%,#efe1bf 100%);
+  }
+  .thumb-b svg{position:absolute;inset:0}
+
+  /* Concept C thumb: pop kinetic */
+  .thumb-c{
+    background:
+      conic-gradient(from 30deg at 50% 50%, #ff2d8a, #00d6ff, #ffe14b, #ff2d8a);
+    filter:saturate(1.05);
+  }
+  .thumb-c::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(#000 1px,transparent 1.6px) 0 0/9px 9px;
+    mix-blend-mode:multiply;opacity:.18;
+  }
+  .thumb-c span.tag{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-4deg);
+    font-family:'Fraunces',serif;font-weight:900;
+    font-size:clamp(36px,6vw,72px);color:#10131a;letter-spacing:-.02em;line-height:.85;
+    text-align:center;mix-blend-mode:multiply;
+  }
+
+  .body{padding:24px 24px 28px}
+  .num{font-family:'Fraunces',serif;font-weight:300;font-size:13px;letter-spacing:.2em;color:var(--muted)}
+  .name{font-family:'Fraunces',serif;font-weight:400;font-size:28px;line-height:1.1;margin:6px 0 8px}
+  .pitch{font-size:14.5px;color:var(--muted);margin:0 0 18px;min-height:3.2em}
+  .swatches{display:flex;gap:6px;margin-bottom:18px}
+  .sw{width:18px;height:18px;border-radius:50%;border:1px solid var(--line)}
+  .open{display:inline-flex;align-items:center;gap:8px;font-size:13px;letter-spacing:.05em;text-transform:uppercase}
+  .open::after{content:"→";transition:transform .3s}
+  .card:hover .open::after{transform:translateX(4px)}
+
+  footer{margin-top:96px;padding-top:32px;border-top:1px solid var(--line);font-size:13px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px}
+
+  @media (prefers-reduced-motion: reduce){
+    .card,.card *{transition:none !important;animation:none !important}
+  }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="top">
+      <div class="brand">DCP <span class="dot"></span> Concept Pitch</div>
+      <div class="meta">Prepared for <b>JaNelle Garner</b><br />Three directions · pick one</div>
+    </header>
+
+    <div class="legend">Three competing homepages</div>
+    <h1 class="hero">Three doors into the <em>Newbicon</em> Galaxy.<br />One belongs to you.</h1>
+    <p class="lede">Each concept tells the same mission in a completely different voice. Open them in any order. The one that makes you feel something in three seconds is the right one.</p>
+
+    <section class="grid" aria-label="Concept thumbnails">
+      <a class="card" href="concept-1-galaxy/index.html" aria-label="Open Concept A — The Galaxy Entrance">
+        <div class="thumb thumb-a" aria-hidden="true"></div>
+        <div class="body">
+          <div class="num">Concept A · 01</div>
+          <div class="name">The Galaxy Entrance</div>
+          <p class="pitch">Cosmic, dark, particle-driven. Visitors step through a portal of stars into the Newbicon universe. Cinematic, scrollable, mysterious.</p>
+          <div class="swatches" aria-hidden="true">
+            <span class="sw" style="background:#080720"></span>
+            <span class="sw" style="background:#1f1b4d"></span>
+            <span class="sw" style="background:#3a2da3"></span>
+            <span class="sw" style="background:#ff8aa6"></span>
+            <span class="sw" style="background:#ffd97a"></span>
+          </div>
+          <span class="open">Open concept A</span>
+        </div>
+      </a>
+
+      <a class="card" href="concept-2-storybook/index.html" aria-label="Open Concept B — The Storybook">
+        <div class="thumb thumb-b" aria-hidden="true">
+          <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <pattern id="paper" width="3" height="3" patternUnits="userSpaceOnUse">
+                <rect width="3" height="3" fill="#f3e3c3" />
+                <circle cx="1" cy="1" r=".4" fill="#b9a274" opacity=".25" />
+              </pattern>
+            </defs>
+            <rect width="400" height="500" fill="url(#paper)" />
+            <g stroke="#2e4f3a" fill="none" stroke-width="1.5" stroke-linecap="round">
+              <path d="M40 380 Q120 260 200 320 T380 280" />
+              <path d="M60 410 Q150 320 240 360 T380 320" />
+            </g>
+            <g fill="#b34a1f">
+              <circle cx="220" cy="180" r="42" />
+              <circle cx="280" cy="200" r="18" />
+              <circle cx="170" cy="150" r="14" />
+            </g>
+            <g fill="#2e4f3a">
+              <ellipse cx="100" cy="430" rx="42" ry="14" />
+              <ellipse cx="320" cy="450" rx="48" ry="16" />
+            </g>
+            <g fill="#c99a3b" opacity=".9">
+              <circle cx="60" cy="60" r="3" />
+              <circle cx="350" cy="80" r="2.5" />
+              <circle cx="320" cy="40" r="2" />
+              <circle cx="120" cy="110" r="2" />
+            </g>
+            <text x="50" y="475" font-family="Fraunces, serif" font-size="13" fill="#5b6473" font-style="italic">— from the library</text>
+          </svg>
+        </div>
+        <div class="body">
+          <div class="num">Concept B · 02</div>
+          <div class="name">The Storybook</div>
+          <p class="pitch">Warm, painterly, illustrated. The site IS a magical library — every scroll turns a page. For families who chose Bluey over CoComelon on purpose.</p>
+          <div class="swatches" aria-hidden="true">
+            <span class="sw" style="background:#f3e3c3"></span>
+            <span class="sw" style="background:#b34a1f"></span>
+            <span class="sw" style="background:#2e4f3a"></span>
+            <span class="sw" style="background:#c99a3b"></span>
+            <span class="sw" style="background:#10131a"></span>
+          </div>
+          <span class="open">Open concept B</span>
+        </div>
+      </a>
+
+      <a class="card" href="concept-3-tooniverse-live/index.html" aria-label="Open Concept C — The Tooniverse Live">
+        <div class="thumb thumb-c" aria-hidden="true">
+          <span class="tag">TOON·<br />IVERSE<br />LIVE</span>
+        </div>
+        <div class="body">
+          <div class="num">Concept C · 03</div>
+          <div class="name">The Tooniverse Live</div>
+          <p class="pitch">High-energy, character-led, kinetic typography. Letters morph, color pops, the screen feels alive. The kid sees this and doesn't blink.</p>
+          <div class="swatches" aria-hidden="true">
+            <span class="sw" style="background:#10131a"></span>
+            <span class="sw" style="background:#ff2d8a"></span>
+            <span class="sw" style="background:#00d6ff"></span>
+            <span class="sw" style="background:#ffe14b"></span>
+            <span class="sw" style="background:#f7f4ed"></span>
+          </div>
+          <span class="open">Open concept C</span>
+        </div>
+      </a>
+    </section>
+
+    <footer>
+      <span>Switchboard Marketing · for Dream Changers Publishing · 2026</span>
+      <span>All concepts open offline · no install</span>
+    </footer>
+  </main>
+</body>
+</html>

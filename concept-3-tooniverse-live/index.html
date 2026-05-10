@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Tooniverse Live — Dream Changers Publishing</title>
+<meta name="description" content="Plug in. Power up. Pass it on. The cartoon network kids actually want — and parents actually trust. Lessons in disguise as fireworks." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Inter:wght@400..800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#10131a;
+    --paper:#f7f4ed;
+    --pink:#ff2d8a;
+    --cyan:#00d6ff;
+    --yellow:#ffe14b;
+    --lime:#9cff5a;
+    --line:rgba(16,19,26,.14);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);overflow-x:hidden}
+  body{
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    -webkit-font-smoothing:antialiased;line-height:1.5;
+  }
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--pink);color:var(--paper)}
+
+  /* Halftone dot background overlay */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
+    background:radial-gradient(var(--ink) 1px, transparent 1.6px) 0 0/14px 14px;
+    opacity:.04;
+  }
+
+  /* Top marquee strip */
+  .marquee{
+    position:relative;z-index:5;
+    background:var(--ink);color:var(--paper);
+    overflow:hidden;border-bottom:2px solid var(--ink);
+  }
+  .marquee-track{
+    display:flex;gap:48px;white-space:nowrap;
+    padding:10px 0;
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
+    font-size:13px;letter-spacing:.18em;text-transform:uppercase;
+    animation: scroll 28s linear infinite;
+  }
+  .marquee-track span{display:inline-flex;align-items:center;gap:48px}
+  .marquee-track span::after{content:"★";color:var(--yellow)}
+  @keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* Top nav */
+  nav.top{
+    position:sticky;top:0;z-index:10;
+    background:var(--paper);border-bottom:2px solid var(--ink);
+    display:flex;justify-content:space-between;align-items:center;
+    padding:14px 24px;
+  }
+  .logo{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+    font-size:18px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;
+  }
+  .logo .live{
+    background:var(--pink);color:var(--paper);font-size:11px;
+    padding:2px 8px;border-radius:4px;letter-spacing:.18em;
+    box-shadow:2px 2px 0 var(--ink);
+  }
+  .nav-links{display:flex;gap:18px;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:13px;letter-spacing:.04em;text-transform:uppercase}
+  .nav-links a{padding:8px 14px;border-radius:999px;border:2px solid transparent;transition:.2s}
+  .nav-links a:hover{border-color:var(--ink);background:var(--yellow)}
+  @media (max-width:760px){.nav-links{display:none}}
+
+  /* Hero */
+  .hero{
+    position:relative;
+    padding:48px 24px 96px;max-width:1280px;margin:0 auto;
+    z-index:2;
+  }
+  .hero-row{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:18px;flex-wrap:wrap}
+  .badge{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--cyan);color:var(--ink);
+    padding:6px 14px;border-radius:999px;border:2px solid var(--ink);
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:700;
+    font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+    box-shadow:3px 3px 0 var(--ink);
+  }
+  .badge .dot{width:8px;height:8px;border-radius:50%;background:var(--pink);box-shadow:0 0 0 2px var(--paper);animation:pulse 1.6s ease-in-out infinite}
+  @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:.7}}
+
+  h1.kinetic{
+    font-family:'Bricolage Grotesque',sans-serif;
+    font-weight:800;font-size:clamp(72px,14vw,200px);
+    line-height:.85;letter-spacing:-.04em;
+    margin:8px 0 24px;
+    text-transform:uppercase;
+  }
+  h1.kinetic .line{display:block;overflow:hidden}
+  h1.kinetic .word{
+    display:inline-block;
+    font-variation-settings:"wdth" 100,"wght" 800;
+    transition:font-variation-settings .55s cubic-bezier(.2,.8,.2,1), color .35s, transform .35s;
+    will-change:font-variation-settings,transform;
+    transform-origin:50% 100%;
+  }
+  h1.kinetic .word.pulse{animation:wordpulse 6s ease-in-out infinite}
+  @keyframes wordpulse{
+    0%,100%{font-variation-settings:"wdth" 100,"wght" 800;transform:scale(1)}
+    50%{font-variation-settings:"wdth" 75,"wght" 600;transform:scale(.96)}
+  }
+  h1.kinetic em{
+    font-style:normal;color:var(--pink);
+    background:linear-gradient(180deg,transparent 60%, var(--yellow) 60%);
+    padding:0 .12em;
+  }
+  h1.kinetic .strike{
+    color:var(--ink);background:var(--cyan);padding:0 .15em;
+    transform:rotate(-2deg) translateY(-.04em);display:inline-block;
+    box-shadow:5px 5px 0 var(--ink);
+  }
+
+  .sub{
+    font-size:clamp(17px,1.4vw,20px);max-width:48ch;margin:0 0 36px;
+    color:var(--ink);
+  }
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .cta{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:18px 28px;
+    background:var(--ink);color:var(--paper);
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+    font-size:15px;letter-spacing:.06em;text-transform:uppercase;
+    border:2px solid var(--ink);border-radius:999px;
+    box-shadow:6px 6px 0 var(--pink);
+    transition:transform .2s,box-shadow .2s,background .2s;
+    cursor:pointer;
+  }
+  .cta:hover{
+    transform:translate(-2px,-2px);
+    box-shadow:8px 8px 0 var(--pink);
+    background:var(--pink);color:var(--paper);border-color:var(--ink);
+  }
+  .cta::after{content:"▶";font-size:11px;transition:transform .2s}
+  .cta:hover::after{transform:translateX(3px)}
+  .cta.alt{background:var(--paper);color:var(--ink);box-shadow:6px 6px 0 var(--cyan)}
+  .cta.alt:hover{background:var(--cyan);color:var(--ink);box-shadow:8px 8px 0 var(--cyan)}
+
+  /* Player card */
+  .player{
+    margin:64px 0 0;display:grid;grid-template-columns:1.6fr .4fr;gap:18px;
+  }
+  @media (max-width:900px){.player{grid-template-columns:1fr}}
+  .screen{
+    aspect-ratio:16/9;border-radius:24px;overflow:hidden;
+    background:linear-gradient(135deg,var(--pink),var(--cyan));
+    border:3px solid var(--ink);
+    box-shadow:10px 10px 0 var(--ink);
+    position:relative;display:grid;place-items:center;
+  }
+  .screen::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(var(--ink) 1px,transparent 1.6px) 0 0/9px 9px;
+    mix-blend-mode:multiply;opacity:.18;
+  }
+  .screen .play{
+    position:relative;width:88px;height:88px;border-radius:50%;
+    background:var(--paper);color:var(--ink);
+    display:grid;place-items:center;font-size:32px;
+    border:3px solid var(--ink);box-shadow:6px 6px 0 var(--ink);
+    transition:transform .25s;cursor:pointer;
+  }
+  .screen .play:hover{transform:scale(1.06)}
+  .screen .play::before{
+    content:"";position:absolute;inset:-12px;border-radius:50%;
+    border:2px dashed var(--ink);animation:spin 14s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .screen .label{
+    position:absolute;left:24px;top:24px;
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+    color:var(--ink);background:var(--yellow);
+    padding:6px 12px;border-radius:6px;border:2px solid var(--ink);
+    font-size:13px;letter-spacing:.18em;text-transform:uppercase;
+    box-shadow:3px 3px 0 var(--ink);
+  }
+  .ep-card{
+    border:2px solid var(--ink);border-radius:24px;padding:20px 18px;
+    background:var(--yellow);box-shadow:6px 6px 0 var(--ink);
+  }
+  .ep-card .num{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:13px;letter-spacing:.2em;text-transform:uppercase}
+  .ep-card h4{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:24px;margin:8px 0 6px;line-height:1.05}
+  .ep-card p{font-size:14px;margin:0 0 14px}
+  .ep-card .meta{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.1em}
+
+  /* Sticker rail */
+  .rail{
+    display:flex;gap:14px;overflow-x:auto;
+    padding:48px 0 16px;scrollbar-width:thin;
+    scroll-snap-type:x mandatory;
+  }
+  .rail::-webkit-scrollbar{height:8px}
+  .rail::-webkit-scrollbar-thumb{background:var(--ink);border-radius:4px}
+  .sticker{
+    flex:0 0 280px;scroll-snap-align:start;
+    aspect-ratio:1/1;border:2px solid var(--ink);border-radius:24px;
+    padding:24px;display:flex;flex-direction:column;justify-content:space-between;
+    box-shadow:5px 5px 0 var(--ink);transition:transform .25s;
+    position:relative;overflow:hidden;
+  }
+  .sticker:hover{transform:translate(-2px,-2px) rotate(-2deg)}
+  .sticker.s1{background:var(--pink);color:var(--paper)}
+  .sticker.s2{background:var(--cyan);color:var(--ink)}
+  .sticker.s3{background:var(--yellow);color:var(--ink)}
+  .sticker.s4{background:var(--lime);color:var(--ink)}
+  .sticker.s5{background:var(--paper);color:var(--ink)}
+  .sticker .num{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:48px;line-height:1}
+  .sticker h5{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:24px;margin:0 0 6px;line-height:1.05}
+  .sticker p{font-size:13px;margin:0;opacity:.9}
+
+  /* DROP / BUILD / JOIN big sections */
+  section.section{
+    position:relative;z-index:2;
+    padding:120px 24px;max-width:1280px;margin:0 auto;
+    border-top:2px solid var(--ink);
+  }
+  .section .label{
+    display:inline-flex;background:var(--ink);color:var(--paper);
+    padding:8px 16px;border-radius:999px;
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+    font-size:13px;letter-spacing:.2em;text-transform:uppercase;margin-bottom:24px;
+  }
+  h2.big{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+    font-size:clamp(48px,8vw,120px);line-height:.85;letter-spacing:-.03em;
+    text-transform:uppercase;margin:0 0 32px;max-width:14ch;
+  }
+  h2.big em{
+    font-style:normal;color:var(--pink);
+    background:linear-gradient(180deg,transparent 62%, var(--yellow) 62%);
+    padding:0 .1em;
+  }
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+  @media (max-width:900px){.grid-2{grid-template-columns:1fr}}
+  .panel{
+    border:2px solid var(--ink);border-radius:24px;padding:32px 28px;
+    background:var(--paper);box-shadow:8px 8px 0 var(--ink);
+  }
+  .panel.alt{background:var(--cyan)}
+  .panel.alt2{background:var(--lime)}
+  .panel h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:28px;margin:0 0 12px;line-height:1.05}
+  .panel p{font-size:15.5px;margin:0 0 12px}
+  .panel ul{padding:0;margin:0;list-style:none;font-size:14.5px;font-weight:600}
+  .panel ul li{display:flex;gap:10px;padding:8px 0;border-bottom:1px dashed var(--ink)}
+  .panel ul li:last-child{border-bottom:none}
+  .panel ul li::before{content:"►";color:var(--pink)}
+
+  /* Big stat */
+  .stat{
+    text-align:center;padding:48px 24px;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);
+    background:var(--yellow);position:relative;overflow:hidden;
+  }
+  .stat::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(var(--ink) 1px,transparent 1.6px) 0 0/14px 14px;
+    opacity:.07;pointer-events:none;
+  }
+  .stat .big-num{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+    font-size:clamp(72px,14vw,200px);line-height:.85;letter-spacing:-.04em;
+  }
+  .stat p{font-size:18px;font-weight:600;margin:8px 0 0;max-width:48ch;margin-inline:auto}
+
+  /* Footer */
+  footer.foot{
+    padding:48px 24px;background:var(--ink);color:var(--paper);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:13px;
+  }
+  footer.foot a:hover{color:var(--yellow)}
+  footer.foot .left{max-width:60ch}
+  footer.foot .left b{color:var(--yellow);font-weight:800;letter-spacing:-.01em;font-size:18px;display:block;margin-bottom:8px}
+
+  /* Reveal */
+  .reveal{opacity:0;transform:translateY(28px) scale(.985);transition:opacity .9s ease, transform .9s cubic-bezier(.2,.8,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important}
+    .reveal{opacity:1;transform:none}
+    h1.kinetic .word{font-variation-settings:"wdth" 100,"wght" 800 !important}
+  }
+</style>
+</head>
+<body>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>NEW DROP — TONIGHT 8PM</span>
+    <span>HIP-HOP CONTEST OPEN</span>
+    <span>FUTUREFORGE BETA LIVE</span>
+    <span>FOUNDERS CIRCLE OPEN</span>
+    <span>WALL OF HEROES · CHAPTER 02</span>
+    <span>NEW DROP — TONIGHT 8PM</span>
+    <span>HIP-HOP CONTEST OPEN</span>
+    <span>FUTUREFORGE BETA LIVE</span>
+    <span>FOUNDERS CIRCLE OPEN</span>
+    <span>WALL OF HEROES · CHAPTER 02</span>
+  </div>
+</div>
+
+<nav class="top">
+  <a href="../index.html" class="logo">TOONIVERSE <span class="live">LIVE</span></a>
+  <div class="nav-links">
+    <a href="#drop">Drop</a>
+    <a href="#build">Build</a>
+    <a href="#join">Join</a>
+    <a href="../index.html">⌂ Concepts</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-row">
+    <div class="badge"><span class="dot"></span> Live now · Episode 24</div>
+    <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink)">EST. NEWBICON · 2026</span>
+  </div>
+
+  <h1 class="kinetic" aria-label="Plug in. Power up. Pass it on.">
+    <span class="line"><span class="word pulse">PLUG</span> <span class="word">IN.</span></span>
+    <span class="line"><span class="word"><em>POWER</em></span> <span class="word pulse">UP.</span></span>
+    <span class="line"><span class="word">PASS</span> <span class="word strike">IT&nbsp;ON.</span></span>
+  </h1>
+
+  <p class="sub">The cartoon network kids actually want — and parents actually trust. Lessons disguised as fireworks. Built for the children who'll rebuild the world.</p>
+
+  <div class="cta-row">
+    <a href="#drop" class="cta">Watch the new drop</a>
+    <a href="#build" class="cta alt">Try FutureForge free</a>
+  </div>
+
+  <div class="player">
+    <div class="screen" aria-hidden="true">
+      <span class="label">EP·024 · "AURACLE RISING"</span>
+      <button class="play" aria-label="Play preview">▶</button>
+    </div>
+    <div class="ep-card">
+      <div class="num">Drop · 024</div>
+      <h4>Auracle Rising</h4>
+      <p>Confidence is a muscle. In tonight's drop, Toate learns to flex it without breaking the room.</p>
+      <div class="meta">7 min · MESH · Confidence</div>
+    </div>
+  </div>
+
+  <div class="rail" aria-label="Sticker pillar gallery">
+    <div class="sticker s1"><div class="num">01</div><div><h5>Tooniverse</h5><p>The animated core. Weekly drops, character-led.</p></div></div>
+    <div class="sticker s2"><div class="num">02</div><div><h5>FutureForge</h5><p>Pick a path. Build something this week.</p></div></div>
+    <div class="sticker s3"><div class="num">03</div><div><h5>Newbicon City</h5><p>The school of the future, hidden inside a galaxy.</p></div></div>
+    <div class="sticker s4"><div class="num">04</div><div><h5>Hip-Hop Contest</h5><p>Your beat. Our characters. A real cartoon.</p></div></div>
+    <div class="sticker s5"><div class="num">05</div><div><h5>Founders Circle</h5><p>The patrons who make every drop possible.</p></div></div>
+  </div>
+</section>
+
+<section class="section" id="drop">
+  <div class="label reveal">DROP</div>
+  <h2 class="big reveal">Every week. <em>A new attitude.</em> A new adventure.</h2>
+  <div class="grid-2">
+    <div class="panel reveal">
+      <h3>What you get</h3>
+      <ul>
+        <li>A 5–8 minute drop, every Friday</li>
+        <li>One MESH lesson, hidden in the story</li>
+        <li>A new song, a new character, a new ride</li>
+        <li>A weekly mission for kids who want to play along</li>
+      </ul>
+    </div>
+    <div class="panel alt reveal">
+      <h3>Built for the post-CoComelon parent</h3>
+      <p>Slower cuts. Real emotional arcs. No overstimulation tricks. The kind of show you can leave on without feeling guilty — because every minute is teaching something the world will eventually quiz them on.</p>
+    </div>
+  </div>
+</section>
+
+<section class="stat reveal">
+  <div class="big-num">100%</div>
+  <p>of every Tooniverse episode hides a real-life skill inside a real-good story. The kid never notices. The brain always does.</p>
+</section>
+
+<section class="section" id="build">
+  <div class="label reveal">BUILD</div>
+  <h2 class="big reveal">FutureForge: pick a path. <em>Build something real.</em> This week.</h2>
+  <div class="grid-2">
+    <div class="panel alt2 reveal">
+      <h3>Dream Path</h3>
+      <p>Storyteller, Inventor, Tech Builder, Leader. The app asks the questions. Your kid picks the future-self.</p>
+    </div>
+    <div class="panel reveal">
+      <h3>Then it gets to work</h3>
+      <ul>
+        <li>Dream Builder turns answers into a project plan</li>
+        <li>Kid Startup Lab walks them through the first ugly version</li>
+        <li>Show-and-tell night puts it in front of real people</li>
+        <li>Confidence grows like a muscle, because it is one</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="join">
+  <div class="label reveal">JOIN</div>
+  <h2 class="big reveal">Be one of the <em>founders</em> who built this.</h2>
+  <div class="grid-2">
+    <div class="panel reveal">
+      <h3>Founders Circle</h3>
+      <p>Three tiers. Real benefits. Real proximity. From early drops to character cameos to your name on the Wall of Heroes, you don't just fund the network — you co-author it.</p>
+      <div class="cta-row" style="margin-top:18px">
+        <a href="#" class="cta">Become a founder</a>
+      </div>
+    </div>
+    <div class="panel alt reveal">
+      <h3>Why your name belongs on this wall</h3>
+      <p>Because the kid who watches Episode 1 in 2027 is going to remember it. And because every reel you fund tonight is a vocabulary, a confidence, a <em>shape</em> they get to keep for life.</p>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="left">
+    <b>TOONIVERSE LIVE · BY DREAM CHANGERS PUBLISHING</b>
+    Made in Clearfield, Utah · streamed wherever children play.
+  </div>
+  <div>
+    <a href="../index.html">← Back to concepts</a> · <a href="#join">Founders Circle</a>
+  </div>
+</footer>
+
+<script type="module">
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  }, {threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // Kinetic word morph on scroll (variable font width)
+  if(!reduce){
+    const words = Array.from(document.querySelectorAll('h1.kinetic .word'));
+    let scrollY=0,target=0;
+    window.addEventListener('scroll', ()=>{ target = window.scrollY; }, {passive:true});
+    function tick(){
+      scrollY += (target-scrollY)*0.1;
+      const p = Math.min(1, scrollY/500);
+      const wdth = 100 - p*40;     // 100 -> 60
+      const wght = 800 - p*200;    // 800 -> 600
+      words.forEach((w,i)=>{
+        if(!w.classList.contains('pulse')){
+          w.style.fontVariationSettings = `"wdth" ${wdth + (i%2?6:-6)},"wght" ${wght + (i%2?40:-40)}`;
+        }
+      });
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+</script>
+
+</body>
+</html>
