@@ -175,5 +175,81 @@ class ConceptIdentity(unittest.TestCase):
         self.assertEqual(len(set(heroes)), len(heroes), f"hero <h1> copy not all distinct: {heroes!r}")
 
 
+class SOTDTier(unittest.TestCase):
+    """Awwwards Site-of-the-Day-tier acceptance tests.
+    Linked to BDD scenarioSetId de117d83-20cf-4aa9-95c4-37130cc5292c."""
+
+    def test_each_has_bespoke_loader(self):
+        for p in ALL_CONCEPTS:
+            html = read(p)
+            self.assertRegex(
+                html,
+                r'class\s*=\s*["\'][^"\']*\b(?:loader|preloader|cinematic-load|page-load|intro-load)\b',
+                f"{p} missing bespoke loader element")
+
+    def test_each_imports_gsap(self):
+        for p in ALL_CONCEPTS:
+            html = read(p).lower()
+            self.assertTrue(
+                "gsap" in html,
+                f"{p} must import GSAP for SOTD-tier scroll choreography")
+
+    def test_each_imports_lenis_smooth_scroll(self):
+        for p in ALL_CONCEPTS:
+            html = read(p).lower()
+            self.assertTrue(
+                "lenis" in html or "smooth-scrollbar" in html,
+                f"{p} must integrate Lenis (or equivalent smooth scroll)")
+
+    def test_each_uses_scrolltrigger(self):
+        for p in ALL_CONCEPTS:
+            html = read(p)
+            self.assertTrue(
+                "ScrollTrigger" in html,
+                f"{p} must use GSAP ScrollTrigger for scroll-stage choreography")
+
+    def test_each_has_custom_cursor_or_pointer_effect(self):
+        for p in ALL_CONCEPTS:
+            html = read(p).lower()
+            self.assertTrue(
+                "cursor" in html and ("pointermove" in html or "mousemove" in html or "follow" in html or "magnetic" in html),
+                f"{p} must implement a custom cursor or magnetic pointer interaction")
+
+    def test_a_signature_camera_stages(self):
+        html = read(CONCEPT_A)
+        # multi-stage camera flight = at least 2 ScrollTrigger triggers OR explicit stage references
+        triggers = len(re.findall(r"ScrollTrigger\.create|scrollTrigger\s*:", html))
+        self.assertGreaterEqual(triggers, 2,
+            "Concept A must have 2+ ScrollTrigger stages for the camera flight")
+
+    def test_b_signature_3d_page_flip(self):
+        html = read(CONCEPT_B).lower()
+        self.assertTrue("preserve-3d" in html and "rotatey" in html,
+            "Concept B must implement 3D page-flip (preserve-3d + rotateY)")
+
+    def test_c_signature_variable_font_axis_morph(self):
+        html = read(CONCEPT_C).lower()
+        self.assertTrue('font-variation-settings' in html and ('"wdth"' in html or "'wdth'" in html),
+            "Concept C must morph variable-font wdth axis")
+
+    def test_d_signature_svg_stroke_draw_animation(self):
+        html = read(CONCEPT_D).lower()
+        self.assertTrue("stroke-dasharray" in html or "stroke-dashoffset" in html,
+            "Concept D must use SVG stroke-dasharray/dashoffset to self-draw the venn")
+
+    def test_f_signature_scroll_driven_grain(self):
+        html = read(CONCEPT_F).lower()
+        # film grain density that responds to scroll
+        self.assertTrue(
+            ("grain" in html or "noise" in html) and ("scrollTrigger" in read(CONCEPT_F) or "scrolly" in html or "scrollratio" in html or "scroll" in html),
+            "Concept F must have scroll-driven film grain or letterbox treatment")
+
+    def test_g_signature_book_pull_or_flip_filter(self):
+        html = read(CONCEPT_G).lower()
+        self.assertTrue(
+            "book-pull" in html or "flip" in html.replace("flip-flop","") or "filter" in html,
+            "Concept G must implement book-pull loader and FLIP-style filter behavior")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
