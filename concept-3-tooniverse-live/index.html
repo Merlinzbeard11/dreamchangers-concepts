@@ -133,23 +133,26 @@
 
   h1.kinetic{
     font-family:'Bricolage Grotesque',sans-serif;
-    font-weight:800;font-size:clamp(72px,14vw,200px);
-    line-height:.85;letter-spacing:-.04em;
-    margin:8px 0 24px;
-    text-transform:uppercase;
+    font-weight:800;font-size:clamp(56px,11.5vw,168px);
+    line-height:.96;letter-spacing:-.035em;
+    margin:8px 0 28px;text-transform:uppercase;
+    padding-bottom:.06em;
   }
-  h1.kinetic .line{display:block;overflow:hidden}
+  h1.kinetic .line{
+    display:flex;align-items:baseline;flex-wrap:nowrap;
+    gap:.22em;white-space:nowrap;overflow:visible;
+    margin-bottom:.06em;
+  }
   h1.kinetic .word{
     display:inline-block;
     font-variation-settings:"wdth" 100,"wght" 800;
-    transition:font-variation-settings .55s cubic-bezier(.2,.8,.2,1), color .35s, transform .35s;
-    will-change:font-variation-settings,transform;
-    transform-origin:50% 100%;
+    transition:font-variation-settings .55s cubic-bezier(.2,.8,.2,1), color .35s;
+    will-change:font-variation-settings;
   }
   h1.kinetic .word.pulse{animation:wordpulse 6s ease-in-out infinite}
   @keyframes wordpulse{
-    0%,100%{font-variation-settings:"wdth" 100,"wght" 800;transform:scale(1)}
-    50%{font-variation-settings:"wdth" 75,"wght" 600;transform:scale(.96)}
+    0%,100%{font-variation-settings:"wdth" 100,"wght" 800}
+    50%{font-variation-settings:"wdth" 75,"wght" 600}
   }
   h1.kinetic em{
     font-style:normal;color:var(--pink);

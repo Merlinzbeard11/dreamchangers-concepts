@@ -181,15 +181,21 @@
   .chapter p{font-size:clamp(16px,1.2vw,19px);max-width:60ch;color:var(--muted);margin:0 0 18px}
   .chapter p strong{color:var(--paper);font-weight:500}
 
-  /* Sticky scroll-stage section — the camera flight controller */
+  /* Sticky scroll-stage section — the camera flight */
   .flight{height:300vh;position:relative}
   .flight-inner{
     position:sticky;top:0;height:100vh;display:flex;align-items:center;justify-content:center;
     overflow:hidden;
   }
   .flight-text{
-    text-align:center;max-width:880px;padding:0 32px;
+    position:relative;text-align:center;max-width:880px;padding:0 32px;width:100%;
   }
+  .flight-card{
+    position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);
+    opacity:0;transition:opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1);
+    pointer-events:none;
+  }
+  .flight-card.on{opacity:1;pointer-events:auto}
   .flight-stage{
     font-family:'Fraunces',serif;font-style:italic;font-weight:300;
     font-size:clamp(13px,1vw,16px);letter-spacing:.4em;text-transform:uppercase;color:var(--gold);
@@ -205,7 +211,7 @@
   .flight p{font-size:clamp(16px,1.3vw,20px);color:var(--muted);max-width:54ch;margin:0 auto}
   .flight-progress{
     position:absolute;left:32px;top:50%;transform:translateY(-50%);
-    display:flex;flex-direction:column;gap:10px;
+    display:flex;flex-direction:column;gap:10px;z-index:5;
   }
   .flight-progress .dot{
     width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.18);
@@ -338,17 +344,21 @@
         <span class="dot" data-dot="2"></span>
       </div>
       <div class="flight-text" data-flight-text>
-        <div class="flight-stage" data-stage="0">Stage 01 — Departure</div>
-        <h2 class="flight-headline" data-stage-h="0">Leave the noise <em>behind you.</em></h2>
-        <p data-stage-p="0">Three seconds in, the screen quiets. The cursor stops being a cursor. You aren't visiting a website anymore. You're already inside.</p>
-
-        <div class="flight-stage" data-stage="1" hidden>Stage 02 — Galaxy</div>
-        <h2 class="flight-headline" data-stage-h="1" hidden>This is the place <em>your child meets themselves.</em></h2>
-        <p data-stage-p="1" hidden>Each planet teaches one thing every child needs and most schools forgot to teach: confidence on Auracle, kindness in the Forest of Dreams, courage on the bridges of Infinatude.</p>
-
-        <div class="flight-stage" data-stage="2" hidden>Stage 03 — Arrival</div>
-        <h2 class="flight-headline" data-stage-h="2" hidden>Now <em>step inside</em>.</h2>
-        <p data-stage-p="2" hidden>Welcome to the Newbicon Galaxy.</p>
+        <div class="flight-card on" data-card="0">
+          <div class="flight-stage">Stage 01 — Departure</div>
+          <h2 class="flight-headline">Leave the noise <em>behind you.</em></h2>
+          <p>Three seconds in, the screen quiets. The cursor stops being a cursor. You aren't visiting a website anymore. You're already inside.</p>
+        </div>
+        <div class="flight-card" data-card="1">
+          <div class="flight-stage">Stage 02 — Galaxy</div>
+          <h2 class="flight-headline">This is the place <em>your child meets themselves.</em></h2>
+          <p>Each planet teaches one thing every child needs and most schools forgot to teach: confidence on Auracle, kindness in the Forest of Dreams, courage on the bridges of Infinatude.</p>
+        </div>
+        <div class="flight-card" data-card="2">
+          <div class="flight-stage">Stage 03 — Arrival</div>
+          <h2 class="flight-headline">Now <em>step inside</em>.</h2>
+          <p>Welcome to the Newbicon Galaxy.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -619,9 +629,12 @@
       onUpdate(self){ scrollProgress = self.progress; }
     });
 
-    // 3 sticky stages with text crossfade
-    const stages = ['0','1','2'];
-    stages.forEach((s,i)=>{
+    // 3 sticky stages with crossfading cards (no hidden toggling — opacity-driven)
+    function setStage(i){
+      document.querySelectorAll('[data-card]').forEach(c=>c.classList.toggle('on', c.dataset.card===String(i)));
+      document.querySelectorAll('[data-dot]').forEach(d=>d.classList.toggle('on', d.dataset.dot===String(i)));
+    }
+    ['0','1','2'].forEach((s,i)=>{
       ScrollTrigger.create({
         trigger:'[data-flight]',
         start:`top+=${i*window.innerHeight} top`,
@@ -630,17 +643,6 @@
         onEnterBack:()=>setStage(i)
       });
     });
-    function setStage(i){
-      const stage = document.querySelector(`[data-stage="${i}"]`);
-      const head  = document.querySelector(`[data-stage-h="${i}"]`);
-      const para  = document.querySelector(`[data-stage-p="${i}"]`);
-      // hide siblings, show current
-      ['0','1','2'].forEach(k=>{
-        document.querySelectorAll(`[data-stage="${k}"],[data-stage-h="${k}"],[data-stage-p="${k}"]`).forEach(el=>el.hidden = (k!==String(i)));
-      });
-      gsap.fromTo([stage,head,para],{y:30,opacity:0},{y:0,opacity:1,duration:.65,stagger:.08,ease:'power3.out'});
-      document.querySelectorAll('[data-dot]').forEach(d=>d.classList.toggle('on', d.dataset.dot===String(i)));
-    }
 
     // Reveal-on-scroll
     gsap.utils.toArray('.reveal').forEach(el=>{
