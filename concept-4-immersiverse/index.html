@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>ImmersiVerse Learning — Dream Changers Publishing</title>
+<meta name="description" content="A 360° classroom for the children who will rebuild the world. Walk into the school the future already wishes it had." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:opsz,wght@9..40,400..700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --board:#0e3a3f;
+    --board-2:#0a2c30;
+    --chalk:#f5f1e8;
+    --paper:#fbf7ed;
+    --brass:#b89048;
+    --tomato:#d44b34;
+    --leaf:#3a7d4a;
+    --line:rgba(245,241,232,.16);
+    --ink:#0a1d20;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);overflow-x:hidden}
+  body{font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.55}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--brass);color:var(--board)}
+
+  /* Top bar */
+  nav.top{
+    position:sticky;top:0;z-index:30;background:var(--board);color:var(--chalk);
+    display:flex;justify-content:space-between;align-items:center;
+    padding:14px 28px;border-bottom:3px solid var(--brass);
+  }
+  .logo{font-family:'DM Serif Display',serif;font-size:22px;letter-spacing:.01em}
+  .logo .badge{
+    display:inline-block;background:var(--brass);color:var(--board);
+    font-family:'DM Sans',sans-serif;font-weight:700;font-size:11px;
+    padding:3px 8px;border-radius:4px;margin-left:8px;letter-spacing:.16em;text-transform:uppercase;
+    vertical-align:middle;
+  }
+  .nav-links{display:flex;gap:22px;font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+  .nav-links a{padding:6px 4px;border-bottom:2px solid transparent;transition:.2s}
+  .nav-links a:hover{border-color:var(--brass);color:var(--brass)}
+  @media (max-width:760px){.nav-links{display:none}}
+
+  /* HERO — chalkboard with illustrated diagram */
+  .hero{
+    position:relative;background:var(--board);color:var(--chalk);
+    padding:80px 32px 120px;overflow:hidden;
+    border-bottom:3px solid var(--brass);
+  }
+  .hero::before{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(60% 40% at 30% 20%, rgba(255,255,255,.08), transparent 60%),
+      repeating-linear-gradient(45deg, rgba(255,255,255,.012) 0 1px, transparent 1px 6px);
+    pointer-events:none;
+  }
+  .hero-grid{
+    position:relative;display:grid;grid-template-columns:1.2fr .8fr;gap:48px;
+    max-width:1280px;margin:0 auto;align-items:center;
+  }
+  @media (max-width:980px){.hero-grid{grid-template-columns:1fr;gap:32px}}
+  .eyebrow{
+    display:inline-block;font-family:'DM Sans',sans-serif;font-weight:700;
+    font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--brass);
+    border:1px solid var(--brass);padding:6px 14px;border-radius:999px;margin-bottom:28px;
+  }
+  h1.hero-title{
+    font-family:'DM Serif Display',serif;font-weight:400;
+    font-size:clamp(48px,7vw,100px);line-height:1.02;letter-spacing:-.015em;
+    margin:0 0 28px;
+  }
+  h1.hero-title em{font-style:italic;color:var(--brass)}
+  .sub{font-size:clamp(17px,1.4vw,21px);max-width:54ch;color:rgba(245,241,232,.8);margin:0 0 36px}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap}
+  .cta{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:16px 26px;border-radius:999px;
+    background:var(--brass);color:var(--board);font-weight:700;font-size:15px;
+    letter-spacing:.04em;border:none;cursor:pointer;
+    transition:transform .25s,box-shadow .25s;
+    box-shadow:0 0 0 2px transparent;
+  }
+  .cta:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(184,144,72,.35)}
+  .cta::after{content:"→";transition:transform .25s}
+  .cta:hover::after{transform:translateX(3px)}
+  .ghost{
+    display:inline-flex;align-items:center;padding:16px 24px;
+    border-radius:999px;background:transparent;color:var(--chalk);
+    border:1px solid var(--line);font-weight:600;font-size:15px;
+  }
+  .ghost:hover{border-color:var(--brass);color:var(--brass)}
+
+  /* MESH Venn — bigger, cleaner */
+  .venn-card{
+    background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0));
+    border:1px solid var(--line);border-radius:24px;
+    padding:28px;backdrop-filter:blur(2px);
+  }
+  .venn-card h4{
+    font-family:'DM Sans',sans-serif;font-weight:700;
+    font-size:13px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);
+    margin:0 0 8px;
+  }
+  .venn-card p{margin:0 0 14px;color:rgba(245,241,232,.7);font-size:14px}
+  .venn-card svg{width:100%;height:auto;display:block}
+
+  /* CHALKBOARD strip — MESH definitions */
+  .strip{
+    background:var(--board-2);color:var(--chalk);padding:48px 24px;
+    border-bottom:3px solid var(--brass);
+  }
+  .strip-row{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;max-width:1180px;margin:0 auto}
+  @media (max-width:900px){.strip-row{grid-template-columns:1fr}}
+  .strip-row .item{padding:0 12px}
+  .strip-row .item .letter{
+    font-family:'DM Serif Display',serif;font-size:80px;line-height:.85;color:var(--brass);
+  }
+  .strip-row .item .word{
+    font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;
+    letter-spacing:.32em;text-transform:uppercase;color:var(--chalk);margin:8px 0 6px;
+  }
+  .strip-row .item p{color:rgba(245,241,232,.7);font-size:15px;margin:0}
+
+  /* ROOMS — the school */
+  section.rooms{
+    padding:120px 32px;max-width:1280px;margin:0 auto;
+  }
+  .section-eyebrow{
+    font-family:'DM Sans',sans-serif;font-weight:700;color:var(--tomato);
+    font-size:12px;letter-spacing:.32em;text-transform:uppercase;margin-bottom:18px;
+  }
+  h2.section-title{
+    font-family:'DM Serif Display',serif;
+    font-size:clamp(38px,5vw,72px);line-height:1.05;letter-spacing:-.012em;
+    margin:0 0 22px;max-width:18ch;color:var(--ink);
+  }
+  h2.section-title em{font-style:italic;color:var(--leaf)}
+  .lede{font-size:clamp(17px,1.3vw,20px);max-width:60ch;color:#3d4f50;margin:0 0 56px}
+
+  .rooms-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media (max-width:1000px){.rooms-grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:640px){.rooms-grid{grid-template-columns:1fr}}
+  .room{
+    border:1px solid rgba(10,29,32,.14);
+    background:var(--paper);border-radius:20px;padding:28px 24px 24px;
+    position:relative;transition:transform .35s, background .35s, border-color .35s;
+    cursor:default;overflow:hidden;
+  }
+  .room:hover{transform:translateY(-4px);background:#fff;border-color:var(--brass)}
+  .room .room-num{
+    font-family:'DM Sans',sans-serif;font-weight:700;font-size:11px;
+    letter-spacing:.32em;color:#7d8a8c;text-transform:uppercase;
+  }
+  .room h3{font-family:'DM Serif Display',serif;font-size:26px;font-weight:400;margin:8px 0 10px;color:var(--board)}
+  .room p{font-size:14.5px;color:#4d5d5f;margin:0 0 18px}
+  .room .door{
+    display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;
+    color:var(--tomato);text-transform:uppercase;letter-spacing:.08em;
+  }
+  .room .door::after{content:"→";transition:transform .2s}
+  .room:hover .door::after{transform:translateX(3px)}
+  .room .deco{
+    position:absolute;right:-30px;top:-30px;width:120px;height:120px;
+    border-radius:50%;background:var(--brass);opacity:.08;pointer-events:none;
+  }
+
+  /* Stat band */
+  .stat{
+    background:var(--brass);color:var(--board);
+    padding:64px 24px;text-align:center;
+    border-top:3px solid var(--board);border-bottom:3px solid var(--board);
+  }
+  .stat .big{
+    font-family:'DM Serif Display',serif;
+    font-size:clamp(56px,9vw,128px);line-height:.85;letter-spacing:-.02em;
+  }
+  .stat p{max-width:54ch;margin:14px auto 0;font-size:18px;font-weight:500}
+
+  /* CTA closer */
+  .closer{
+    padding:120px 32px;max-width:980px;margin:0 auto;text-align:center;
+  }
+  .closer h2{
+    font-family:'DM Serif Display',serif;font-weight:400;
+    font-size:clamp(36px,5.2vw,72px);line-height:1.05;
+    margin:0 0 22px;color:var(--board);
+  }
+  .closer h2 em{font-style:italic;color:var(--tomato)}
+  .closer p{color:#4d5d5f;font-size:18px;max-width:54ch;margin:0 auto 32px}
+
+  footer.foot{
+    padding:48px 32px;background:var(--board-2);color:rgba(245,241,232,.7);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:18px;
+    font-size:13px;border-top:3px solid var(--brass);
+  }
+  footer.foot a{color:var(--brass)}
+  footer.foot a:hover{color:var(--chalk)}
+
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .9s ease, transform .9s cubic-bezier(.2,.8,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <a href="../index.html" class="logo">ImmersiVerse <span class="badge">Learning</span></a>
+  <div class="nav-links">
+    <a href="#mesh">MESH</a>
+    <a href="#rooms">Rooms</a>
+    <a href="#enroll">Enroll</a>
+    <a href="../index.html">⌂ Concepts</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-grid">
+    <div>
+      <span class="eyebrow">A 360° Classroom for the Newbicon Galaxy</span>
+      <h1 class="hero-title">Walk into the school the <em>future</em> already wishes it had.</h1>
+      <p class="sub">A learning system designed around three things every child needs and most schools forgot to teach: Mental, Emotional, and Social Health. We call it MESH. Kids call it the best part of their day.</p>
+      <div class="cta-row">
+        <a href="#rooms" class="cta">Tour the rooms</a>
+        <a href="#mesh" class="ghost">What is MESH? →</a>
+      </div>
+    </div>
+
+    <aside class="venn-card" aria-label="MESH Learning Venn diagram">
+      <h4>The MESH Framework</h4>
+      <p>Three circles. One whole human. Every lesson sits where they overlap.</p>
+      <svg viewBox="0 0 400 400" role="img" aria-label="Mental, Emotional, Social — Health at the intersection">
+        <g fill="none" stroke="#b89048" stroke-width="2.2">
+          <circle cx="160" cy="180" r="86"/>
+          <circle cx="240" cy="180" r="86"/>
+          <circle cx="200" cy="240" r="86"/>
+        </g>
+        <g font-family="DM Serif Display, serif" font-size="20" fill="#f5f1e8" text-anchor="middle">
+          <text x="118" y="146">Mental</text>
+          <text x="282" y="146">Emotional</text>
+          <text x="200" y="346">Social</text>
+        </g>
+        <g text-anchor="middle">
+          <circle cx="200" cy="208" r="6" fill="#d44b34"/>
+          <text x="200" y="196" font-family="DM Serif Display, serif" font-style="italic" font-size="20" fill="#d44b34">Health</text>
+        </g>
+      </svg>
+    </aside>
+  </div>
+</header>
+
+<section class="strip" aria-label="MESH expanded" id="mesh">
+  <div class="strip-row">
+    <div class="item">
+      <div class="letter">M</div>
+      <div class="word">Mental</div>
+      <p>Curiosity. Critical thinking. The muscle that asks <em>why</em> on purpose.</p>
+    </div>
+    <div class="item">
+      <div class="letter">E</div>
+      <div class="word">Emotional</div>
+      <p>Self-awareness. Empathy. The ability to feel what is happening and name it.</p>
+    </div>
+    <div class="item">
+      <div class="letter">S</div>
+      <div class="word">Social</div>
+      <p>Collaboration. Kindness. Knowing how to be in a room with people who aren't you.</p>
+    </div>
+  </div>
+</section>
+
+<section class="rooms" id="rooms">
+  <div class="section-eyebrow reveal">The Rooms</div>
+  <h2 class="section-title reveal">A school that opens, room by room, like a <em>universe</em>.</h2>
+  <p class="lede reveal">Each room teaches a real-world skill through play and story. No worksheets. No filler. Just the parts of school children actually remember when they grow up.</p>
+
+  <div class="rooms-grid">
+    <article class="room reveal"><div class="deco"></div>
+      <div class="room-num">Room 01</div><h3>Discovery Hall</h3>
+      <p>Where a problem is the door, not the punishment. Hands-on, hypothesis-first learning.</p>
+      <span class="door">Open the door</span>
+    </article>
+    <article class="room reveal"><div class="deco"></div>
+      <div class="room-num">Room 02</div><h3>Oceanic Hallway</h3>
+      <p>Reading, writing, and storytelling under a moving canopy of light. Literacy you feel.</p>
+      <span class="door">Step inside</span>
+    </article>
+    <article class="room reveal"><div class="deco"></div>
+      <div class="room-num">Room 03</div><h3>Math with Einstein</h3>
+      <p>Numbers told as stories. Geometry as architecture. Algebra as power.</p>
+      <span class="door">Solve a riddle</span>
+    </article>
+    <article class="room reveal"><div class="deco"></div>
+      <div class="room-num">Room 04</div><h3>Portals to the Arts</h3>
+      <p>Music, painting, theater, dance — the fastest path to confidence we have ever found.</p>
+      <span class="door">Pick a portal</span>
+    </article>
+    <article class="room reveal"><div class="deco"></div>
+      <div class="room-num">Room 05</div><h3>Science Exploratorium</h3>
+      <p>Where wonder gets a lab coat. Build, break, measure, marvel.</p>
+      <span class="door">Run an experiment</span>
+    </article>
+    <article class="room reveal"><div class="deco"></div>
+      <div class="room-num">Room 06</div><h3>Newbicon City</h3>
+      <p>Real jobs. Real learning. Real fun. A city built for kids, inspired by the real world.</p>
+      <span class="door">Enter the city</span>
+    </article>
+  </div>
+</section>
+
+<aside class="stat reveal">
+  <div class="big">100%</div>
+  <p>of every ImmersiVerse hour teaches one specific MESH skill — measured, explainable, and visible to the parent who pays attention.</p>
+</aside>
+
+<section class="closer" id="enroll">
+  <div class="section-eyebrow reveal" style="text-align:center;color:var(--leaf)">Color in the Classroom</div>
+  <h2 class="reveal">Bring ImmersiVerse to <em>your school</em>.</h2>
+  <p class="reveal">A pilot program for forward-leaning schools, microschools, and homeschool collectives. We bring the rooms, the curriculum, and a creative team that knows how to keep children awake.</p>
+  <div class="cta-row reveal" style="justify-content:center">
+    <a href="#" class="cta">Request a pilot</a>
+    <a href="../index.html" class="ghost">Back to concepts</a>
+  </div>
+</section>
+
+<footer class="foot">
+  <span>ImmersiVerse Learning · a Dream Changers Publishing initiative · 2026</span>
+  <span><a href="../index.html">← Back to concepts</a></span>
+</footer>
+
+<script type="module">
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduce){
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+    }, {threshold:0.12});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));
+  }
+</script>
+</body>
+</html>

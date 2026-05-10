@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>The Lost Legend Archive — Dream Changers Publishing</title>
+<meta name="description" content="The complete catalog of the Lost Legend Library. Eight books, twenty-three characters, one universe. Search the archive." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=JetBrains+Mono:wght@400..700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --emerald:#1a3d2e;
+    --emerald-2:#0f2a20;
+    --emerald-3:#244e3c;
+    --mahogany:#5a2818;
+    --mahogany-2:#7c3a25;
+    --parchment:#ece4cf;
+    --parchment-2:#dcd1b6;
+    --gold-leaf:#b58c2a;
+    --ink:#1a1410;
+    --line:rgba(26,20,16,.16);
+    --muted:#6f6353;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--parchment);color:var(--ink);overflow-x:hidden}
+  body{
+    font-family:'Newsreader',Georgia,serif;
+    -webkit-font-smoothing:antialiased;line-height:1.55;font-size:17px;
+  }
+  a{color:inherit;text-decoration:none}
+  .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+
+  /* Top bar */
+  nav.top{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:14px 28px;background:var(--emerald);color:var(--parchment);
+    border-bottom:1px solid var(--gold-leaf);
+    position:sticky;top:0;z-index:30;
+  }
+  .crest{display:flex;align-items:center;gap:12px;font-family:'Newsreader',serif;font-style:italic;font-weight:500;font-size:18px}
+  .crest svg{width:28px;height:28px;fill:none;stroke:var(--gold-leaf);stroke-width:1.6}
+  .nav-links{display:flex;gap:24px;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--parchment-2)}
+  .nav-links a:hover{color:var(--gold-leaf)}
+  @media (max-width:760px){.nav-links{display:none}}
+
+  /* HERO — archive masthead */
+  .masthead{
+    padding:64px 32px 48px;border-bottom:1px solid var(--line);
+    display:grid;grid-template-columns:1.4fr .6fr;gap:48px;
+    max-width:1320px;margin:0 auto;align-items:end;
+  }
+  @media (max-width:980px){.masthead{grid-template-columns:1fr;gap:32px}}
+  .masthead .meta-line{
+    font-family:'JetBrains Mono',monospace;font-size:11px;
+    letter-spacing:.32em;text-transform:uppercase;color:var(--mahogany);
+    margin-bottom:24px;display:flex;gap:18px;flex-wrap:wrap;
+  }
+  .masthead .meta-line span::before{content:"//  ";color:var(--gold-leaf)}
+  h1.masthead-title{
+    font-family:'Newsreader',serif;font-weight:300;
+    font-size:clamp(56px,9vw,140px);line-height:.92;letter-spacing:-.025em;
+    margin:0;color:var(--emerald);
+  }
+  h1.masthead-title em{font-style:italic;color:var(--mahogany);font-weight:400}
+
+  .stat-block{
+    border-left:1px solid var(--line);padding-left:24px;
+    font-size:14px;color:var(--muted);
+  }
+  .stat-block .row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px dashed var(--line);font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+  .stat-block .row b{color:var(--mahogany);font-family:'Newsreader',serif;font-style:italic;font-size:18px;letter-spacing:0;text-transform:none;font-weight:400}
+
+  /* SEARCH bar */
+  .search-band{
+    background:var(--emerald);color:var(--parchment);
+    padding:20px 24px;border-bottom:1px solid var(--gold-leaf);
+  }
+  .search-row{
+    max-width:1320px;margin:0 auto;display:flex;gap:14px;align-items:center;flex-wrap:wrap;
+  }
+  .search-input{
+    flex:1;min-width:260px;display:flex;align-items:center;gap:10px;
+    background:var(--emerald-2);border:1px solid var(--emerald-3);
+    border-radius:6px;padding:10px 16px;color:var(--parchment);
+  }
+  .search-input::before{content:"⌕";color:var(--gold-leaf);font-size:18px}
+  .search-input input{
+    flex:1;background:transparent;border:none;outline:none;color:var(--parchment);
+    font-family:'Newsreader',serif;font-size:16px;
+  }
+  .search-input input::placeholder{color:rgba(236,228,207,.5);font-style:italic}
+  .filter-chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    padding:8px 14px;border:1px solid var(--emerald-3);border-radius:999px;color:var(--parchment-2);
+    cursor:pointer;transition:.2s;
+  }
+  .chip.on,.chip:hover{background:var(--gold-leaf);color:var(--emerald);border-color:var(--gold-leaf)}
+
+  /* CATALOG GRID */
+  .catalog{padding:64px 32px;max-width:1320px;margin:0 auto}
+  .catalog-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:36px;border-bottom:1px solid var(--line);padding-bottom:18px}
+  .catalog-head h2{font-family:'Newsreader',serif;font-weight:400;font-size:28px;margin:0;color:var(--emerald)}
+  .catalog-head h2 em{color:var(--mahogany);font-style:italic}
+  .catalog-head .count{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  @media (max-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}}
+  @media (max-width:780px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:520px){.grid{grid-template-columns:1fr}}
+
+  .book{
+    background:#fff;border:1px solid var(--line);border-radius:6px;
+    overflow:hidden;display:flex;flex-direction:column;
+    transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s, border-color .35s;
+  }
+  .book:hover{transform:translateY(-6px);box-shadow:0 24px 50px -28px rgba(26,20,16,.35);border-color:var(--gold-leaf)}
+  .cover{aspect-ratio:2/3;position:relative;overflow:hidden}
+  .cover svg{width:100%;height:100%;display:block}
+  .book-body{padding:18px 18px 20px;display:flex;flex-direction:column;flex:1}
+  .vol{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--mahogany)}
+  .book h3{font-family:'Newsreader',serif;font-weight:500;font-size:20px;line-height:1.15;margin:6px 0 6px;color:var(--emerald)}
+  .book .by{font-style:italic;font-size:13px;color:var(--muted);margin:0 0 12px}
+  .book .meta{display:flex;gap:14px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:auto;padding-top:12px;border-top:1px dashed var(--line)}
+  .book .meta b{color:var(--ink);font-weight:600}
+  .book .open{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--mahogany);text-transform:uppercase;letter-spacing:.12em;font-family:'JetBrains Mono',monospace;margin-top:10px}
+  .book .open::after{content:"→";transition:transform .25s}
+  .book:hover .open::after{transform:translateX(3px)}
+
+  /* Featured spotlight */
+  .spotlight{
+    background:var(--emerald);color:var(--parchment);
+    padding:80px 32px;border-top:1px solid var(--gold-leaf);border-bottom:1px solid var(--gold-leaf);
+  }
+  .spotlight-inner{max-width:1320px;margin:0 auto;display:grid;grid-template-columns:.4fr .6fr;gap:48px;align-items:center}
+  @media (max-width:980px){.spotlight-inner{grid-template-columns:1fr}}
+  .spotlight .label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold-leaf);margin-bottom:12px}
+  .spotlight h3{font-family:'Newsreader',serif;font-weight:300;font-size:clamp(32px,4vw,56px);line-height:1.05;margin:0 0 16px;color:var(--parchment)}
+  .spotlight h3 em{font-style:italic;color:var(--gold-leaf)}
+  .spotlight p{color:rgba(236,228,207,.78);font-size:17px;margin:0 0 24px;max-width:48ch}
+  .spotlight .cta{
+    display:inline-flex;align-items:center;gap:10px;padding:14px 24px;
+    border:1px solid var(--gold-leaf);color:var(--gold-leaf);
+    border-radius:4px;font-family:'JetBrains Mono',monospace;font-weight:600;
+    font-size:11px;letter-spacing:.32em;text-transform:uppercase;
+    transition:.2s;
+  }
+  .spotlight .cta:hover{background:var(--gold-leaf);color:var(--emerald)}
+  .spotlight .feature-cover{
+    aspect-ratio:3/4;background:linear-gradient(135deg, var(--mahogany), var(--mahogany-2));
+    border:1px solid var(--gold-leaf);box-shadow:0 30px 60px -20px rgba(0,0,0,.5);
+    display:grid;place-items:center;padding:48px;text-align:center;color:var(--parchment);
+    border-radius:4px;
+  }
+  .feature-cover .vol{color:var(--gold-leaf);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.32em;text-transform:uppercase}
+  .feature-cover .title{font-family:'Newsreader',serif;font-style:italic;font-weight:300;font-size:36px;line-height:1.1;margin-top:18px}
+  .feature-cover .ornament{font-family:'Newsreader',serif;color:var(--gold-leaf);margin-top:18px}
+
+  /* Characters strip */
+  .characters{padding:80px 32px;max-width:1320px;margin:0 auto;border-top:1px solid var(--line)}
+  .characters h2{font-family:'Newsreader',serif;font-weight:300;font-size:clamp(32px,4.5vw,64px);line-height:1.05;margin:0 0 36px;color:var(--emerald)}
+  .characters h2 em{color:var(--mahogany);font-style:italic}
+  .char-row{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  @media (max-width:900px){.char-row{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:520px){.char-row{grid-template-columns:1fr}}
+  .char{
+    border:1px solid var(--line);background:#fff;border-radius:6px;
+    padding:24px 22px;transition:.3s;
+  }
+  .char:hover{border-color:var(--mahogany);transform:translateY(-3px)}
+  .char .glyph{font-family:'Newsreader',serif;font-style:italic;color:var(--mahogany);font-size:36px;line-height:1}
+  .char h4{font-family:'Newsreader',serif;font-weight:500;font-size:20px;margin:6px 0 6px;color:var(--emerald)}
+  .char p{font-size:14px;color:var(--muted);margin:0 0 12px}
+  .char .role{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--mahogany);font-weight:600}
+
+  footer.foot{
+    padding:48px 32px;background:var(--emerald-2);color:rgba(236,228,207,.8);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:18px;
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;
+    border-top:1px solid var(--gold-leaf);
+  }
+  footer.foot a{color:var(--gold-leaf)}
+  footer.foot a:hover{color:var(--parchment)}
+
+  .reveal{opacity:0;transform:translateY(20px);transition:opacity .9s ease, transform .9s cubic-bezier(.2,.8,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <a href="../index.html" class="crest">
+    <svg viewBox="0 0 32 32" aria-hidden="true">
+      <path d="M4 6 Q4 4 6 4 H14 Q16 4 16 6 V28"/>
+      <path d="M28 6 Q28 4 26 4 H18 Q16 4 16 6 V28"/>
+      <path d="M16 4 V28"/>
+    </svg>
+    The Lost Legend Archive
+  </a>
+  <div class="nav-links">
+    <a href="#catalog">Catalog</a>
+    <a href="#spotlight">Spotlight</a>
+    <a href="#characters">Characters</a>
+    <a href="../index.html">⌂ Concepts</a>
+  </div>
+</nav>
+
+<header class="masthead">
+  <div>
+    <div class="meta-line"><span>Catalog · Volume I</span><span>23 characters</span><span>8 titles</span><span>Updated 2026·V·09</span></div>
+    <h1 class="masthead-title">The complete <em>Lost Legend</em> archive.</h1>
+  </div>
+  <aside class="stat-block">
+    <div class="row"><span>Books in print</span><b>8</b></div>
+    <div class="row"><span>Total pages</span><b>2,164</b></div>
+    <div class="row"><span>Reading age</span><b>7 – 14</b></div>
+    <div class="row"><span>Languages</span><b>1, soon 4</b></div>
+  </aside>
+</header>
+
+<section class="search-band">
+  <div class="search-row">
+    <label class="search-input">
+      <input type="text" placeholder="Search the archive — titles, characters, themes..." aria-label="Search the archive" />
+    </label>
+    <div class="filter-chips" role="group" aria-label="Filter by attitude">
+      <span class="chip on">All</span>
+      <span class="chip">Confidence</span>
+      <span class="chip">Kindness</span>
+      <span class="chip">Curiosity</span>
+      <span class="chip">Courage</span>
+      <span class="chip">Friendship</span>
+    </div>
+  </div>
+</section>
+
+<section class="catalog" id="catalog">
+  <div class="catalog-head">
+    <h2>The <em>Catalog</em></h2>
+    <span class="count">Showing 8 of 8</span>
+  </div>
+
+  <div class="grid">
+    <article class="book reveal">
+      <div class="cover" style="background:linear-gradient(135deg,#5a2818,#7c3a25)">
+        <svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid slice">
+          <rect width="200" height="300" fill="#5a2818"/>
+          <g stroke="#b58c2a" fill="none" stroke-width="1.4">
+            <rect x="14" y="14" width="172" height="272" rx="2"/>
+            <line x1="14" y1="40" x2="186" y2="40"/>
+            <line x1="14" y1="260" x2="186" y2="260"/>
+          </g>
+          <text x="100" y="150" text-anchor="middle" font-family="Newsreader" font-size="22" font-style="italic" fill="#ece4cf">The Lost Legend</text>
+          <text x="100" y="180" text-anchor="middle" font-family="Newsreader" font-size="14" font-style="italic" fill="#b58c2a">of the Tude Shifters</text>
+          <text x="100" y="240" text-anchor="middle" font-family="JetBrains Mono" font-size="9" letter-spacing="2" fill="#b58c2a">VOLUME I</text>
+        </svg>
+      </div>
+      <div class="book-body">
+        <span class="vol">Vol. I</span>
+        <h3>The Lost Legend of the Tude Shifters</h3>
+        <p class="by">By JaNelle Garner</p>
+        <div class="meta"><b>294 pp</b><span>Confidence</span></div>
+        <span class="open">Open</span>
+      </div>
+    </article>
+
+    <article class="book reveal">
+      <div class="cover" style="background:linear-gradient(135deg,#244e3c,#1a3d2e)">
+        <svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid slice">
+          <rect width="200" height="300" fill="#1a3d2e"/>
+          <g stroke="#b58c2a" fill="none" stroke-width="1.4">
+            <rect x="14" y="14" width="172" height="272" rx="2"/>
+          </g>
+          <circle cx="100" cy="120" r="36" fill="none" stroke="#ece4cf" stroke-width="1.4"/>
+          <circle cx="100" cy="120" r="6" fill="#b58c2a"/>
+          <text x="100" y="200" text-anchor="middle" font-family="Newsreader" font-size="20" font-style="italic" fill="#ece4cf">Book of</text>
+          <text x="100" y="226" text-anchor="middle" font-family="Newsreader" font-size="22" font-style="italic" fill="#b58c2a">Auracles</text>
+        </svg>
+      </div>
+      <div class="book-body">
+        <span class="vol">Vol. II</span>
+        <h3>Book of Auracles</h3>
+        <p class="by">By JaNelle Garner</p>
+        <div class="meta"><b>248 pp</b><span>Curiosity</span></div>
+        <span class="open">Open</span>
+      </div>
+    </article>
+
+    <article class="book reveal">
+      <div class="cover" style="background:linear-gradient(135deg,#1a3d2e,#0f2a20)">
+        <svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid slice">
+          <rect width="200" height="300" fill="#0f2a20"/>
+          <g fill="#b58c2a" stroke="none">
+            <rect x="40" y="100" width="20" height="20"/>
+            <rect x="60" y="100" width="20" height="20" fill="#5a2818"/>
+            <rect x="80" y="100" width="20" height="20"/>
+            <rect x="100" y="100" width="20" height="20" fill="#5a2818"/>
+            <rect x="120" y="100" width="20" height="20"/>
+            <rect x="140" y="100" width="20" height="20" fill="#5a2818"/>
+            <rect x="40" y="120" width="20" height="20" fill="#5a2818"/>
+            <rect x="60" y="120" width="20" height="20"/>
+            <rect x="80" y="120" width="20" height="20" fill="#5a2818"/>
+            <rect x="100" y="120" width="20" height="20"/>
+            <rect x="120" y="120" width="20" height="20" fill="#5a2818"/>
+            <rect x="140" y="120" width="20" height="20"/>
+          </g>
+          <text x="100" y="200" text-anchor="middle" font-family="Newsreader" font-size="22" font-style="italic" fill="#ece4cf">Freedom</text>
+          <text x="100" y="226" text-anchor="middle" font-family="Newsreader" font-size="22" font-style="italic" fill="#b58c2a">Quilt Patch</text>
+        </svg>
+      </div>
+      <div class="book-body">
+        <span class="vol">Vol. III</span>
+        <h3>Freedom Quilt Patch</h3>
+        <p class="by">By JaNelle Garner</p>
+        <div class="meta"><b>176 pp</b><span>Courage</span></div>
+        <span class="open">Open</span>
+      </div>
+    </article>
+
+    <article class="book reveal">
+      <div class="cover" style="background:linear-gradient(135deg,#7c3a25,#5a2818)">
+        <svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid slice">
+          <rect width="200" height="300" fill="#7c3a25"/>
+          <g stroke="#b58c2a" fill="none" stroke-width="1.6">
+            <circle cx="100" cy="130" r="40"/>
+            <path d="M70 130 Q100 90 130 130 T70 130"/>
+          </g>
+          <text x="100" y="210" text-anchor="middle" font-family="Newsreader" font-size="20" font-style="italic" fill="#ece4cf">A Breakthrough</text>
+          <text x="100" y="234" text-anchor="middle" font-family="Newsreader" font-size="14" font-style="italic" fill="#b58c2a">on Planet Earth</text>
+        </svg>
+      </div>
+      <div class="book-body">
+        <span class="vol">Vol. IV</span>
+        <h3>A Breakthrough on Planet Earth</h3>
+        <p class="by">By JaNelle Garner</p>
+        <div class="meta"><b>212 pp</b><span>Friendship</span></div>
+        <span class="open">Open</span>
+      </div>
+    </article>
+
+    <article class="book reveal">
+      <div class="cover" style="background:linear-gradient(135deg,#b58c2a,#5a2818)">
+        <svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid slice">
+          <rect width="200" height="300" fill="#5a2818"/>
+          <g fill="#b58c2a">
+            <polygon points="100,80 110,110 142,110 116,128 126,158 100,140 74,158 84,128 58,110 90,110"/>
+          </g>
+          <text x="100" y="200" text-anchor="middle" font-family="Newsreader" font-size="22" font-style="italic" fill="#ece4cf">Premium</text>
+          <text x="100" y="226" text-anchor="middle" font-family="Newsreader" font-size="22" font-style="italic" fill="#b58c2a">Spotlight</text>
+        </svg>
+      </div>
+      <div class="book-body">
+        <span class="vol">Vol. V</span>
+        <h3>Premium Spotlight</h3>
+        <p class="by">By JaNelle Garner</p>
+        <div class="meta"><b>198 pp</b><span>Confidence</span></div>
+        <span class="open">Open</span>
+      </div>
+    </article>
+
+    <article class="book reveal">
+      <div class="cover" style="background:linear-gradient(135deg,#244e3c,#1a3d2e)">
+        <svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid slice">
+          <rect width="200" height="300" fill="#244e3c"/>
+          <g stroke="#b58c2a" fill="none" stroke-width="1.4">
+            <path d="M60 130 L100 90 L140 130 Z"/>
+            <path d="M70 160 L100 120 L130 160 Z"/>
+          </g>
+          <text x="100" y="210" text-anchor="middle" font-family="Newsreader" font-size="22" font-style="italic" fill="#ece4cf">Starter</text>
+          <text x="100" y="236" text-anchor="middle" font-family="Newsreader" font-size="22" font-style="italic" fill="#b58c2a">Spotlight</text>
+        </svg>
+      </div>
+      <div class="book-body">
+        <span class="vol">Vol. VI</span>
+        <h3>Starter Spotlight</h3>
+        <p class="by">By JaNelle Garner</p>
+        <div class="meta"><b>168 pp</b><span>Curiosity</span></div>
+        <span class="open">Open</span>
+      </div>
+    </article>
+
+    <article class="book reveal">
+      <div class="cover" style="background:linear-gradient(135deg,#0f2a20,#244e3c)">
+        <svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid slice">
+          <rect width="200" height="300" fill="#0f2a20"/>
+          <g stroke="#ece4cf" fill="none" stroke-width="1.2">
+            <circle cx="100" cy="120" r="50"/>
+            <line x1="50" y1="120" x2="150" y2="120"/>
+            <line x1="100" y1="70" x2="100" y2="170"/>
+          </g>
+          <text x="100" y="220" text-anchor="middle" font-family="Newsreader" font-size="20" font-style="italic" fill="#b58c2a">The Compass</text>
+          <text x="100" y="244" text-anchor="middle" font-family="Newsreader" font-size="13" font-style="italic" fill="#ece4cf">forthcoming</text>
+        </svg>
+      </div>
+      <div class="book-body">
+        <span class="vol">Vol. VII</span>
+        <h3>The Compass</h3>
+        <p class="by">By JaNelle Garner · forthcoming</p>
+        <div class="meta"><b>est. 280 pp</b><span>Kindness</span></div>
+        <span class="open">Pre-read</span>
+      </div>
+    </article>
+
+    <article class="book reveal">
+      <div class="cover" style="background:linear-gradient(135deg,#5a2818,#1a3d2e)">
+        <svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid slice">
+          <rect width="200" height="300" fill="#1a3d2e"/>
+          <g fill="#b58c2a">
+            <circle cx="100" cy="130" r="6"/>
+            <circle cx="60" cy="100" r="3"/>
+            <circle cx="140" cy="100" r="3"/>
+            <circle cx="80" cy="170" r="3"/>
+            <circle cx="120" cy="170" r="3"/>
+            <line x1="100" y1="130" x2="60" y2="100" stroke="#b58c2a" stroke-width="1"/>
+            <line x1="100" y1="130" x2="140" y2="100" stroke="#b58c2a" stroke-width="1"/>
+            <line x1="100" y1="130" x2="80" y2="170" stroke="#b58c2a" stroke-width="1"/>
+            <line x1="100" y1="130" x2="120" y2="170" stroke="#b58c2a" stroke-width="1"/>
+          </g>
+          <text x="100" y="220" text-anchor="middle" font-family="Newsreader" font-size="20" font-style="italic" fill="#ece4cf">The</text>
+          <text x="100" y="244" text-anchor="middle" font-family="Newsreader" font-size="20" font-style="italic" fill="#b58c2a">Constellation</text>
+        </svg>
+      </div>
+      <div class="book-body">
+        <span class="vol">Vol. VIII</span>
+        <h3>The Constellation</h3>
+        <p class="by">By JaNelle Garner · forthcoming</p>
+        <div class="meta"><b>est. 320 pp</b><span>Friendship</span></div>
+        <span class="open">Pre-read</span>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="spotlight" id="spotlight">
+  <div class="spotlight-inner">
+    <div>
+      <div class="label">Book of the Month</div>
+      <h3>Step inside <em>The Lost Legend of the Tude Shifters</em>.</h3>
+      <p>Eight chapters. Twenty-three characters. The first volume in the founding series — a bestselling Christian children's novel that started a universe and then a publishing house. This is where the whole thing begins.</p>
+      <a href="#" class="cta">Read chapter one</a>
+    </div>
+    <div class="feature-cover">
+      <span class="vol">Vol. I · MMXVI</span>
+      <div class="title">The Lost Legend<br />of the Tude Shifters</div>
+      <div class="ornament">✺</div>
+    </div>
+  </div>
+</section>
+
+<section class="characters" id="characters">
+  <h2 class="reveal">Twenty-three <em>characters</em>. One galaxy. Pick a friend.</h2>
+  <div class="char-row">
+    <article class="char reveal"><div class="glyph">A</div><h4>Toate</h4><p class="role">The Inventor</p><p>The founder of Newbicon City. Builds something new before breakfast.</p></article>
+    <article class="char reveal"><div class="glyph">B</div><h4>Auracle</h4><p class="role">The Listener</p><p>Hears the room before anyone else does. Knows what to say next.</p></article>
+    <article class="char reveal"><div class="glyph">C</div><h4>Newbi</h4><p class="role">The Curious</p><p>Asks the question the grown-ups forgot. Answers the one nobody else can.</p></article>
+    <article class="char reveal"><div class="glyph">D</div><h4>Sheldon</h4><p class="role">The Loyal</p><p>The one you want when things get hard. The one who shows up.</p></article>
+  </div>
+</section>
+
+<footer class="foot">
+  <span>The Lost Legend Archive · Dream Changers Publishing · MMXXVI</span>
+  <span><a href="../index.html">← Back to concepts</a></span>
+</footer>
+
+<script type="module">
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduce){
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+    }, {threshold:0.12});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));
+  }
+
+  // Filter chip interaction (visual only)
+  document.querySelectorAll('.chip').forEach(c=>{
+    c.addEventListener('click', ()=>{
+      document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
+      c.classList.add('on');
+    });
+  });
+</script>
+</body>
+</html>

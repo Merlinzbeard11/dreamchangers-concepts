@@ -16,7 +16,10 @@ INDEX = os.path.join(ROOT, "index.html")
 CONCEPT_A = os.path.join(ROOT, "concept-1-galaxy", "index.html")
 CONCEPT_B = os.path.join(ROOT, "concept-2-storybook", "index.html")
 CONCEPT_C = os.path.join(ROOT, "concept-3-tooniverse-live", "index.html")
-ALL_CONCEPTS = [CONCEPT_A, CONCEPT_B, CONCEPT_C]
+CONCEPT_D = os.path.join(ROOT, "concept-4-immersiverse", "index.html")
+CONCEPT_F = os.path.join(ROOT, "concept-5-wall-of-heroes", "index.html")
+CONCEPT_G = os.path.join(ROOT, "concept-6-lost-legend-archive", "index.html")
+ALL_CONCEPTS = [CONCEPT_A, CONCEPT_B, CONCEPT_C, CONCEPT_D, CONCEPT_F, CONCEPT_G]
 
 
 def read(path):
@@ -36,9 +39,18 @@ class IndexPage(unittest.TestCase):
         self.assertIn("concept-2-storybook/", html)
         self.assertIn("concept-3-tooniverse-live/", html)
 
+    def test_index_lists_extra_concepts(self):
+        html = read(INDEX)
+        self.assertIn("concept-4-immersiverse/", html)
+        self.assertIn("concept-5-wall-of-heroes/", html)
+        self.assertIn("concept-6-lost-legend-archive/", html)
+
     def test_index_thumbnails_link_to_each_concept(self):
         html = read(INDEX)
-        for href in ("concept-1-galaxy/", "concept-2-storybook/", "concept-3-tooniverse-live/"):
+        for href in (
+            "concept-1-galaxy/", "concept-2-storybook/", "concept-3-tooniverse-live/",
+            "concept-4-immersiverse/", "concept-5-wall-of-heroes/", "concept-6-lost-legend-archive/",
+        ):
             self.assertRegex(html, rf'href\s*=\s*["\'][^"\']*{re.escape(href)}', f"index missing link to {href}")
 
 
@@ -64,7 +76,7 @@ class EveryConcept(unittest.TestCase):
             m = re.search(r"<title>(.*?)</title>", read(p), re.IGNORECASE | re.DOTALL)
             self.assertIsNotNone(m, f"{p} missing <title>")
             titles.append(m.group(1).strip().lower())
-        self.assertEqual(len(set(titles)), 3, f"titles not unique: {titles}")
+        self.assertEqual(len(set(titles)), len(ALL_CONCEPTS), f"titles not unique: {titles}")
 
     def test_each_exposes_one_primary_cta(self):
         for p in ALL_CONCEPTS:
@@ -125,28 +137,42 @@ class ConceptIdentity(unittest.TestCase):
             "transform" in html and ("scale" in html or "stretch" in html or "wdth" in html),
             "concept C must animate transforms for kinetic typography")
 
+    def test_d_anchors_immersiverse_pillar(self):
+        html = read(CONCEPT_D).lower()
+        self.assertIn("mesh", html, "concept D must reference MESH Learning")
+        self.assertTrue(any(t in html for t in ("immersiverse", "classroom", "discovery room", "newbicon city")),
+                        "concept D must reference ImmersiVerse / classroom pillar")
+
+    def test_f_anchors_wall_of_heroes_pillar(self):
+        html = read(CONCEPT_F).lower()
+        self.assertTrue(any(t in html for t in ("wall of heroes", "founders", "founding", "honor wall", "patron")),
+                        "concept F must reference Wall of Heroes / patronage pillar")
+
+    def test_g_anchors_lost_legend_pillar(self):
+        html = read(CONCEPT_G).lower()
+        self.assertTrue(any(t in html for t in ("lost legend", "tude shifters", "library", "archive", "catalog")),
+                        "concept G must reference Lost Legend Library / archive pillar")
+
     def test_each_has_distinct_palette(self):
-        # extract any hex colors from each file; the leading-dominant set must differ across the three
         def palette(path):
             return set(re.findall(r"#[0-9a-fA-F]{6}", read(path)))
-        a, b, c = palette(CONCEPT_A), palette(CONCEPT_B), palette(CONCEPT_C)
-        self.assertGreater(len(a), 0, "concept A defines no hex colors")
-        self.assertGreater(len(b), 0, "concept B defines no hex colors")
-        self.assertGreater(len(c), 0, "concept C defines no hex colors")
-        # at least 80% unique-to-self
-        for name, mine, others in [("A", a, b | c), ("B", b, a | c), ("C", c, a | b)]:
+        sets = {p: palette(p) for p in ALL_CONCEPTS}
+        for p, s in sets.items():
+            self.assertGreater(len(s), 0, f"{p} defines no hex colors")
+        # each concept must contain at least 4 hex colors not shared by any other concept
+        for p, mine in sets.items():
+            others = set().union(*[v for k, v in sets.items() if k != p])
             unique = mine - others
-            self.assertGreaterEqual(len(unique) / max(len(mine), 1), 0.4,
-                                    f"concept {name} palette overlaps too much with the others")
+            self.assertGreaterEqual(len(unique), 4,
+                                    f"{p} palette overlaps too much; only {len(unique)} unique hexes")
 
     def test_each_has_distinct_hero_copy(self):
-        # extract first <h1> innerText from each
         def h1(path):
             m = re.search(r"<h1[^>]*>(.*?)</h1>", read(path), re.IGNORECASE | re.DOTALL)
             self.assertIsNotNone(m, f"{path} has no <h1>")
             return re.sub(r"<[^>]+>", "", m.group(1)).strip().lower()
-        ha, hb, hc = h1(CONCEPT_A), h1(CONCEPT_B), h1(CONCEPT_C)
-        self.assertEqual(len({ha, hb, hc}), 3, f"hero <h1> copy not distinct: {ha!r} {hb!r} {hc!r}")
+        heroes = [h1(p) for p in ALL_CONCEPTS]
+        self.assertEqual(len(set(heroes)), len(heroes), f"hero <h1> copy not all distinct: {heroes!r}")
 
 
 if __name__ == "__main__":
