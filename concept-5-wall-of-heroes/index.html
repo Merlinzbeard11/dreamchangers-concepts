@@ -491,23 +491,8 @@
       }
     });
 
-    /* SIGNATURE 2: marquee speed reacts to scroll velocity */
-    const track = document.querySelector('.marquee-track');
-    if(track){
-      let vel=0;
-      let last=window.scrollY,lastT=performance.now();
-      ScrollTrigger.create({
-        trigger:document.body, start:'top top', end:'bottom bottom',
-        onUpdate(self){
-          const now=performance.now();
-          const dy=Math.abs(window.scrollY - last);
-          const dt=now-lastT;
-          vel = dy/Math.max(dt,1);
-          last=window.scrollY;lastT=now;
-          track.style.animationDuration = (60 / Math.max(.5, 1+vel*60)) + 's';
-        }
-      });
-    }
+    /* Honor wall ribbon: constant, calm, dignified pace.
+       (Intentionally not coupled to scroll — gravitas beats kinetic.) */
 
     /* Tier 3D tilt on hover */
     document.querySelectorAll('.tier').forEach(t=>{
